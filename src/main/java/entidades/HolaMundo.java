@@ -1,4 +1,4 @@
-package entidades;
+package main.java.entidades;
 
 public class HolaMundo {
 
