@@ -1,4 +1,4 @@
-package models;
+package entidades;
 
 public class HolaMundo {
 
