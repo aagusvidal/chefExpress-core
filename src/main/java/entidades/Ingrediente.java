@@ -1,4 +1,4 @@
-package main.java.entidades;
+package entidades;
 
 public class Ingrediente {
 	

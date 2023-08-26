@@ -1,11 +1,11 @@
-package main.java.entidades;
+package entidades;
 
 public class HolaMundo {
 
 	public String holaMundo;
 
     public HolaMundo() {
-    	holaMundo = "¡Hola Mundo desde el Modelo!";
+    	holaMundo = "Hola Mundo desde el Modelo!";
     }
     
 	public String getHolaMundo() {

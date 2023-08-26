@@ -1,6 +1,5 @@
-package test.java;
 import org.junit.*; // Importa las anotaciones de JUnit
-import main.java.test.HolatestJava;
+import test.HolatestJava;
 
 public class TestAll {
     @Test

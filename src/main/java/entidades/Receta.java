@@ -1,5 +1,4 @@
-package main.java.entidades;
-
+package entidades;
 import java.util.List;
 
 public class Receta {
