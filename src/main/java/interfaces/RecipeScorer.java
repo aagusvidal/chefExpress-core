@@ -1,4 +1,4 @@
-package model;
+package interfaces;
 
 import entities.Recipe;
 

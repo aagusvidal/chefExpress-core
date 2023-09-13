@@ -1,17 +1,43 @@
 package entities;
+
 import java.util.HashMap;
-import java.util.List;
 
 public class Recipe {
-
 	protected int id;
-	protected HashMap<String, Float> ingredients;
-	protected List<String> instructions;
+	protected String name;
 
-	public Recipe(int id, HashMap<String, Float> ingredients, List<String> instructions) {
-		this.id = id;
-		this.ingredients = ingredients;
-		this.instructions = instructions;
+	protected HashMap<String, Float> ingredients;
+
+	public Recipe(){
+
 	}
-	
+	public Recipe(int id, String name, HashMap<String, Float> ingredients) {
+		this.id = id;
+		this.name = name;
+		this.ingredients = ingredients;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public HashMap<String, Float> getIngredients() {
+		return ingredients;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	public void setIngredients(HashMap<String, Float> ingredients) {
+		this.ingredients = ingredients;
+	}
+
 }
