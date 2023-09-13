@@ -1,6 +1,6 @@
 package finders;
 
-import model.RecipeScorer;
+import interfaces.RecipeScorer;
 
 import java.io.File;
 import java.net.URL;
