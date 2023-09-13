@@ -6,8 +6,8 @@ import entities.Recipe;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class RecipeParser {
     private ObjectMapper objectMapper;
@@ -16,11 +16,11 @@ public class RecipeParser {
         objectMapper = new ObjectMapper();
     }
 
-    public List<Recipe> parserRecipes() {
-        List<Recipe> recipes = new ArrayList<>();
+    public Set<Recipe> parserRecipes() {
+        Set<Recipe> recipes = new HashSet<Recipe>();
         try {
             InputStream inputStream = RecipeParser.class.getResourceAsStream("/recipes.json");
-            TypeReference<List<Recipe>> typeReference = new TypeReference<List<Recipe>>() {};
+            TypeReference<Set<Recipe>> typeReference = new TypeReference<Set<Recipe>>() {};
             recipes = objectMapper.readValue(inputStream, typeReference);
 
             return recipes;
