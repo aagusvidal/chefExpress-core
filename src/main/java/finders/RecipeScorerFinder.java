@@ -14,7 +14,7 @@ public class RecipeScorerFinder {
     public RecipeScorerFinder(String url) {
         this.directory = url;
     }
-    HashSet<RecipeScorer> findClasses(String path) throws Exception{
+    public HashSet<RecipeScorer> findClasses() throws Exception{
         HashSet<RecipeScorer> result = new HashSet<>();
 
         if(new File(this.directory).isFile()) throw new IllegalArgumentException();
