@@ -1,13 +1,13 @@
 import entities.Recipe;
 import parsers.RecipeParser;
 
-import java.util.List;
+import java.util.Set;
 
 public class MainPruebaParser {
 
     public static void main(String[] args) {
         RecipeParser p = new RecipeParser();
-        List<Recipe> recetas = p.parserRecipes();
+        Set<Recipe> recetas = p.parserRecipes();
 
         for (Recipe recipe : recetas) {
             System.out.println("ID: " + recipe.getId());
