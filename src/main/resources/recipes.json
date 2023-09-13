@@ -1,0 +1,41 @@
+[
+    {
+        "id": 1,
+        "name": "Hamburguesa con queso y papas fritas",
+        "ingredients": {
+            "Carne de hamburguesa": 1,
+            "Pan de hamburguesa": 1,
+            "Queso cheddar": 2,
+            "Lechuga": 1,
+            "Tomate": 1,
+            "Cebolla": 0.5,
+            "Mayonesa": 1,
+            "Papas": 200
+        }
+    },
+    {
+        "id": 2,
+	    "name": "Salmón al horno con papas y espárragos",
+        "ingredients": {
+            "salmón": 2.0,
+            "espárragos": 8.0,
+            "limón": 1.0,
+            "papas": 2.0,
+            "aceite de oliva": 2.0,
+            "sal": 0.5
+        }
+        
+    },
+    {
+        "id": 3,
+        "name": "Pollo con ensalada de quinoa y espinaca",
+        "ingredients": {
+            "quinoa": 1.0,
+            "espinacas": 2.0,
+            "tomate": 1.0,
+            "aguacate": 1.0,
+            "limón": 1.0,
+            "aceite de oliva": 2.0
+        }
+    }
+]
