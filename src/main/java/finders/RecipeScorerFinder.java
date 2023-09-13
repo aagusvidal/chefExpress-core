@@ -3,10 +3,10 @@ package finders;
 import interfaces.RecipeScorer;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.HashSet;
-import java.io.IOException;
+import java.util.HashMap;
 
 public class RecipeScorerFinder {
     public String directory;
@@ -14,8 +14,8 @@ public class RecipeScorerFinder {
     public RecipeScorerFinder(String url) {
         this.directory = url;
     }
-    public HashSet<RecipeScorer> findClasses() throws Exception{
-        HashSet<RecipeScorer> result = new HashSet<>();
+    public HashMap<String, RecipeScorer> findClasses() throws Exception{
+        HashMap<String, RecipeScorer> result = new HashMap<String, RecipeScorer>();
 
         if(new File(this.directory).isFile()) throw new IllegalArgumentException();
 
@@ -30,7 +30,7 @@ public class RecipeScorerFinder {
             URLClassLoader classLoader = URLClassLoader.newInstance(new URL[] { f.toURI().toURL() });
             Class<?> cls = Class.forName(filenameWithoutDotClass, true, classLoader);
             if (!RecipeScorer.class.isAssignableFrom(cls)) continue;
-            result.add((RecipeScorer) cls.getDeclaredConstructor().newInstance());
+            result.put(filenameWithoutDotClass, (RecipeScorer) cls.getDeclaredConstructor().newInstance());
         }
         return result;
     }
