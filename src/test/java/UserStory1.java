@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class UserStorey1 {
+public class UserStory1 {
     private ChefExpress chefExpress;
     private List<Recipe> unsortedRecipes;
     private List<Recipe> sortedRecipes;
