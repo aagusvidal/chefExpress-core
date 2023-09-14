@@ -3,35 +3,96 @@ package finders;
 import interfaces.RecipeScorer;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.HashMap;
+import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.stream.Collectors;
 
-public class RecipeScorerFinder {
+public class RecipeScorerFinder
+{
     public String directory;
+    private static final String validFileExtension = ".jar";
 
-    public RecipeScorerFinder(String url) {
+
+    public RecipeScorerFinder(String url)
+    {
         this.directory = url;
     }
-    public HashMap<String, RecipeScorer> findClasses() throws Exception{
-        HashMap<String, RecipeScorer> result = new HashMap<String, RecipeScorer>();
 
-        if(new File(this.directory).isFile()) throw new IllegalArgumentException();
+    public  Map<String, RecipeScorer>  find() throws FileNotFoundException
+    {
+        Map<String, RecipeScorer> scorers = new HashMap<>();
 
-        if(this.directory == null || new File(this.directory).listFiles() == null) throw new IOException();
+        File file = new File(this.directory);
 
-        for (File f : new File(this.directory).listFiles()) {
-            String filename = f.getName();
-            if (!filename.endsWith(".class")) continue;
+        if (!file.exists())
+            throw  new FileNotFoundException();
 
-            String[] filename_splited_bar = filename.replace(".class", "").split("/");
-            String filenameWithoutDotClass = filename_splited_bar[filename_splited_bar.length-1];
-            URLClassLoader classLoader = URLClassLoader.newInstance(new URL[] { f.toURI().toURL() });
-            Class<?> cls = Class.forName(filenameWithoutDotClass, true, classLoader);
-            if (!RecipeScorer.class.isAssignableFrom(cls)) continue;
-            result.put(filenameWithoutDotClass, (RecipeScorer) cls.getDeclaredConstructor().newInstance());
+        if(!file.isDirectory())
+            throw  new IllegalArgumentException();
+
+        List<File> jars = getJars(file);
+
+        try
+        {
+            Set<Class<?>> classes = findClassesInJar(jars);
+
+            for(Class<?> aClass : classes)
+            {
+                if (RecipeScorer.class.isAssignableFrom(aClass))
+                    scorers.put(aClass.getName(), (RecipeScorer) aClass.getDeclaredConstructor().newInstance() );
+            }
         }
-        return result;
+        catch ( Exception e) { throw new RuntimeException(e); }
+
+        return scorers;
+    }
+
+    private Set<Class<?>> findClassesInJar(List<File> filejars)
+    {
+        Set<Class<?>> classes = new HashSet<>();
+
+        for(File file : filejars)
+        {
+            try (JarFile jarFile = new JarFile(file))
+            {
+                URLClassLoader classLoader = URLClassLoader.newInstance(new URL[]{file.toURI().toURL()});
+
+                Enumeration<JarEntry> entries = jarFile.entries();
+
+                while (entries.hasMoreElements())
+                {
+                    JarEntry entry = entries.nextElement();
+                    if (!entry.isDirectory() && entry.getName().endsWith(".class"))
+                    {
+                        String[] filename_splited_bar = entry.getName().replace(".class", "").split("/");
+                        String className = filename_splited_bar[filename_splited_bar.length-1];
+
+                        Class<?> cls = Class.forName(className, true, classLoader);
+                        classes.add(cls);
+                    }
+                }
+
+            } catch (IOException | ClassNotFoundException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return  classes;
+    }
+
+    private List<File> getJars(File target)
+    {
+        File[] fileList = Optional.of(target).map(File::listFiles)
+                .orElse(new File[] {});
+
+        return Arrays.asList(fileList).stream()
+                .filter(i -> i.getPath().endsWith(validFileExtension))
+                .collect(Collectors.toList());
     }
 }
