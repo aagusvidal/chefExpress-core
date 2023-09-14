@@ -1,17 +1,18 @@
 package entities;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Recipe {
 	protected int id;
 	protected String name;
 
-	protected HashMap<String, Float> ingredients;
+	protected Map<String, Float> ingredients;
 
 	public Recipe(){
 
 	}
-	public Recipe(int id, String name, HashMap<String, Float> ingredients) {
+	public Recipe(int id, String name, Map<String, Float> ingredients) {
 		this.id = id;
 		this.name = name;
 		this.ingredients = ingredients;
@@ -25,7 +26,7 @@ public class Recipe {
 		return name;
 	}
 
-	public HashMap<String, Float> getIngredients() {
+	public Map<String, Float> getIngredients() {
 		return ingredients;
 	}
 
@@ -40,4 +41,15 @@ public class Recipe {
 		this.ingredients = ingredients;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Recipe recipe = (Recipe) o;
+
+		if (id != recipe.id) return false;
+		if (!name.equals(recipe.name)) return false;
+		return ingredients.equals(recipe.ingredients);
+	}
 }
