@@ -2,32 +2,43 @@ package IT0;
 
 import finders.RecipeScorerFinder;
 import interfaces.RecipeScorer;
-import org.junit.Test;
+import jdk.jfr.Description;
+import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
 import java.util.Map;
 
-public class US2
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+public class UserStory2
 {
         private static String basePath = "build/resources/test/";
 
-        /** @name = Ubicacion inexistente
-         * @exception = FileNotFoundException **/
-        @Test(expected = FileNotFoundException.class)
+        @Description("Ubicacion inexistente")
+        @Test
         public void CA1() throws Exception
         {
-                new RecipeScorerFinder("NoExiste").find();
+                assertThrows(FileNotFoundException.class,
+                        ()->
+                        {
+                                new RecipeScorerFinder("NoExiste").find();
+                        });
         }
 
-        /** @name = Ubicacion invalida
-         * @exception = IllegalArgumentException **/
-        @Test(expected = IllegalArgumentException.class)
+        @Description("Ubicacion invalida")
+        @Test
         public void CA2() throws Exception
         {
-                new RecipeScorerFinder(basePath + "archivo.txt").find();
+
+                assertThrows(IllegalArgumentException.class,
+                        ()->
+                        {
+                                new RecipeScorerFinder(basePath + "archivo.txt").find();
+                        });
+
         }
 
-        /** @name = Carpeta vacia **/
+        @Description("Carpeta vacia")
         @Test
         public void CA3() throws Exception
         {
@@ -36,8 +47,7 @@ public class US2
                 assert (scorers.isEmpty());
         }
 
-
-        /** @name = No es criterio de puntuación **/
+        @Description("No es criterio de puntuacion")
         @Test
         public void CA4() throws Exception
         {
@@ -45,7 +55,7 @@ public class US2
                 assert (finder.find().isEmpty());
         }
 
-        /** @name = Puntuador simple **/
+        @Description("Puntuador simple")
         @Test
         public void CA5() throws Exception
         {
@@ -56,7 +66,7 @@ public class US2
                 assert (scorers.containsKey("RecetasSaludables"));
         }
 
-        /** @name = Puntuador multiples **/
+        @Description("Puntuador multiples")
         @Test
         public void CA6() throws Exception
         {
