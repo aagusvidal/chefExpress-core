@@ -6,15 +6,14 @@ import interfaces.RecipeScorer;
 import model.ChefExpress;
 import model.ObservableChefExpress;
 import parsers.RecipeParser;
-
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 public class ChefExpressFactory {
     RecipeParser recipeParser;
     RecipeScorerFinder scorerFinder;
     ChefExpress chefExpress;
-    HashMap<String, RecipeScorer> recipeScorers;
+    Map<String, RecipeScorer> recipeScorers;
 
     String defaultConfig;
     public ChefExpressFactory(String propertyPath, String defaultConfig) {
@@ -29,12 +28,11 @@ public class ChefExpressFactory {
         return new ObservableChefExpress(recommend);
     }
 
-    private HashMap<String, RecipeScorer> recipeScorers() throws Exception {
-        return scorerFinder.findClasses();
+    private Map<String, RecipeScorer> recipeScorers() throws Exception {
+        return scorerFinder.find();
     }
     private Set<Recipe> parserRecipes(){
        return recipeParser.parserRecipes();
     }
-
 
 }
