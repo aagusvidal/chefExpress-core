@@ -5,8 +5,6 @@ import interfaces.RecipeScorer;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
@@ -28,25 +26,28 @@ public class RecipeScorerFinder
     public  Map<String, RecipeScorer>  find() throws FileNotFoundException
     {
         Map<String, RecipeScorer> scorers = new HashMap<>();
-        List<File> filejars = findFileJars(this.directory);
+
+        File file = new File(this.directory);
+
+        if (!file.exists())
+            throw  new FileNotFoundException();
+
+        if(!file.isDirectory())
+            throw  new IllegalArgumentException();
+
+        List<File> jars = getJars(file);
 
         try
         {
-            URL[] urlsList = getUrls(filejars);
-            URLClassLoader ClassesLoader = new URLClassLoader(urlsList);
-            Set<Class<?>> classes = findClassesInJar(filejars);
+            Set<Class<?>> classes = findClassesInJar(jars);
 
-            for(Class<?> element : classes)
+            for(Class<?> aClass : classes)
             {
-                if (RecipeScorer.class.isAssignableFrom(element))
-                    scorers.put(element.getName(), (RecipeScorer) element.getDeclaredConstructor().newInstance() );
+                if (RecipeScorer.class.isAssignableFrom(aClass))
+                    scorers.put(aClass.getName(), (RecipeScorer) aClass.getDeclaredConstructor().newInstance() );
             }
         }
-        catch (MalformedURLException | InvocationTargetException | InstantiationException | IllegalAccessException |
-                 NoSuchMethodException e)
-        {
-            throw new RuntimeException(e);
-        }
+        catch ( Exception e) { throw new RuntimeException(e); }
 
         return scorers;
     }
@@ -68,7 +69,8 @@ public class RecipeScorerFinder
                     JarEntry entry = entries.nextElement();
                     if (!entry.isDirectory() && entry.getName().endsWith(".class"))
                     {
-                        String className = entry.getName().replace("/", ".").replace(".class", "");
+                        String[] filename_splited_bar = entry.getName().replace(".class", "").split("/");
+                        String className = filename_splited_bar[filename_splited_bar.length-1];
 
                         Class<?> cls = Class.forName(className, true, classLoader);
                         classes.add(cls);
@@ -84,30 +86,13 @@ public class RecipeScorerFinder
         return  classes;
     }
 
-    private List<File> findFileJars(String pathFile) throws FileNotFoundException
+    private List<File> getJars(File target)
     {
-        File fileJar = new File(pathFile);
-        if (!fileJar.exists())
-            throw  new FileNotFoundException();
-
-        if(!fileJar.isDirectory())
-            throw  new IllegalArgumentException();
-
-        File[] fileList = Optional.of(fileJar).map(File::listFiles)
+        File[] fileList = Optional.of(target).map(File::listFiles)
                 .orElse(new File[] {});
 
         return Arrays.asList(fileList).stream()
                 .filter(i -> i.getPath().endsWith(validFileExtension))
                 .collect(Collectors.toList());
     }
-
-    private URL[] getUrls(List<File> filejars) throws MalformedURLException
-    {
-        URL[] urlsList = new URL[filejars.size()];
-        for (int i = 0; i < filejars.size(); i++) {
-            urlsList[i] = filejars.get(i).toURI().toURL();
-        }
-        return urlsList;
-    }
-
 }
