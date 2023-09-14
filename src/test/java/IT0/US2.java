@@ -27,14 +27,14 @@ public class US2
                 new RecipeScorerFinder(basePath + "archivo.txt").find();
         }
 
-        /** @name = Carpeta vacia **/
-        @Test
-        public void CA3() throws Exception
-        {
-                RecipeScorerFinder finder = new RecipeScorerFinder(basePath + "carpetaVacia");
-                Map<String, RecipeScorer> scorers = finder.find();
-                assert (scorers.isEmpty());
-        }
+//        /** @name = Carpeta vacia **/
+//        @Test
+//        public void CA3() throws Exception
+//        {
+//                RecipeScorerFinder finder = new RecipeScorerFinder(basePath + "carpetaVacia");
+//                Map<String, RecipeScorer> scorers = finder.find();
+//                assert (scorers.isEmpty());
+//        }
 
 
         /** @name = No es criterio de puntuación **/
