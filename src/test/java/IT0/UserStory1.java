@@ -3,7 +3,7 @@ package IT0;
 import entities.Recipe;
 import interfaces.RecipeScorer;
 import jdk.jfr.Description;
-import model.ChefExpress;
+import core.ChefExpress;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
