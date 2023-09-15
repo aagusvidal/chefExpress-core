@@ -16,7 +16,7 @@ public class UserStory2
 
         @Description("Ubicacion inexistente")
         @Test
-        public void CA1() throws Exception
+        public void ca1UbicacionInexistente() throws Exception
         {
                 assertThrows(FileNotFoundException.class,
                         ()->
@@ -27,7 +27,7 @@ public class UserStory2
 
         @Description("Ubicacion invalida")
         @Test
-        public void CA2() throws Exception
+        public void ca2UbicacionInvalida() throws Exception
         {
 
                 assertThrows(IllegalArgumentException.class,
@@ -40,7 +40,7 @@ public class UserStory2
 
         @Description("Carpeta vacia")
         @Test
-        public void CA3() throws Exception
+        public void ca3CarpetaVacia() throws Exception
         {
                 RecipeScorerFinder finder = new RecipeScorerFinder(basePath + "carpetaVacia");
                 Map<String, RecipeScorer> scorers = finder.find();
@@ -49,7 +49,7 @@ public class UserStory2
 
         @Description("No es criterio de puntuacion")
         @Test
-        public void CA4() throws Exception
+        public void ca4NoEsCriterioDePuntuacion() throws Exception
         {
                 RecipeScorerFinder finder = new RecipeScorerFinder(basePath + "noEsCriterio");
                 assert (finder.find().isEmpty());
@@ -57,7 +57,7 @@ public class UserStory2
 
         @Description("Puntuador simple")
         @Test
-        public void CA5() throws Exception
+        public void ca5PuntuadorSimple() throws Exception
         {
                 RecipeScorerFinder finder = new RecipeScorerFinder(basePath + "oneImpl");
                 Map<String, RecipeScorer> scorers = finder.find();
@@ -68,7 +68,7 @@ public class UserStory2
 
         @Description("Puntuador multiples")
         @Test
-        public void CA6() throws Exception
+        public void ca6PuntuadoresMultiples() throws Exception
         {
                 RecipeScorerFinder finder = new RecipeScorerFinder(basePath + "twoImpl");
                 Map<String, RecipeScorer> scorers = finder.find();
