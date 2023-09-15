@@ -38,7 +38,7 @@ public class UserStory1 {
     }
 
     @Test
-    @Description("CA1")
+    @Description("Recomendación de múltiples recetas")
     public void recommendationOfMultipleRecipes() {
         final int recipesLimit = 2;
         when(scorerA.score(this.unsortedRecipes.get(0))).thenReturn(0);
@@ -52,7 +52,7 @@ public class UserStory1 {
     }
 
     @Test
-    @Description("CA2")
+    @Description("Recomendación  de una receta")
     public void recommendationOfOneRecipe() {
         final int expectedRecipesLimit = 1;
         when(scorerA.score(this.unsortedRecipes.get(0))).thenReturn(0);
@@ -66,7 +66,7 @@ public class UserStory1 {
     }
 
     @Test
-    @Description("CA3")
+    @Description("No se recomiendan recetas")
     public void recipesWithoutRecommendations() {
         List<Recipe> recommendations = chefExpress.recommend();
         when(scorerA.score(this.unsortedRecipes.get(0))).thenReturn(0);
@@ -77,7 +77,7 @@ public class UserStory1 {
     }
 
     @Test
-    @Description("CA4")
+    @Description("Recomendación sin recetas")
     public void recommendationWithoutRecipes() {
         chefExpress = new ChefExpress(new HashSet<>(), scorerA);
 
