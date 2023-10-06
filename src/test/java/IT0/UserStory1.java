@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -41,9 +42,15 @@ public class UserStory1 {
     @Description("Recomendación de múltiples recetas")
     public void ca1RecomendacionDeMultiplesRecetas() {
         final int recipesLimit = 2;
-        when(scorerA.score(this.unsortedRecipes.get(0))).thenReturn(0);
-        when(scorerA.score(this.unsortedRecipes.get(1))).thenReturn(5);
-        when(scorerA.score(this.unsortedRecipes.get(2))).thenReturn(10);
+        final Map<Integer, Integer> expectedScores = Map.of(
+                0, 0,
+                1, 5,
+                2, 10
+        );
+        expectedScores.entrySet().stream().forEach(entry ->
+            when(scorerA.score(this.unsortedRecipes.get(entry.getKey())))
+                    .thenReturn(entry.getValue())
+        );
 
         List<Recipe> recommendations = chefExpress.recommend();
 
@@ -55,9 +62,15 @@ public class UserStory1 {
     @Description("Recomendación  de una receta")
     public void ca2RecomendacionDeUnaReceta() {
         final int expectedRecipesLimit = 1;
-        when(scorerA.score(this.unsortedRecipes.get(0))).thenReturn(0);
-        when(scorerA.score(this.unsortedRecipes.get(1))).thenReturn(0);
-        when(scorerA.score(this.unsortedRecipes.get(2))).thenReturn(10);
+        final Map<Integer, Integer> expectedScores = Map.of(
+                0, 0,
+                1, 0,
+                2, 10
+        );
+        expectedScores.entrySet().stream().forEach(entry ->
+                when(scorerA.score(this.unsortedRecipes.get(entry.getKey())))
+                        .thenReturn(entry.getValue())
+        );
 
         List<Recipe> recommendations = chefExpress.recommend();
 
@@ -69,9 +82,6 @@ public class UserStory1 {
     @Description("No se recomiendan recetas")
     public void ca3NoSeRecomiendanRecetas() {
         List<Recipe> recommendations = chefExpress.recommend();
-        when(scorerA.score(this.unsortedRecipes.get(0))).thenReturn(0);
-        when(scorerA.score(this.unsortedRecipes.get(1))).thenReturn(0);
-        when(scorerA.score(this.unsortedRecipes.get(2))).thenReturn(0);
 
         assertTrue(recommendations.isEmpty());
     }
@@ -82,6 +92,20 @@ public class UserStory1 {
         chefExpress = new ChefExpress(new HashSet<>(), scorerA);
 
         List<Recipe> recommendations = chefExpress.recommend();
+
+        assertTrue(recommendations.isEmpty());
+    }
+
+    @Test
+    @Description("Recetas sin puntaje")
+    public void ca5RecetaSinPuntaje() {
+        final Recipe recipe = mockRecipe(0, "not-scored-recipe");
+        final Set<Recipe> unScoredRecipes = Set.of(recipe);
+        chefExpress = new ChefExpress(unScoredRecipes, scorerA);
+
+        when(scorerA.score(recipe)).thenReturn(0);
+
+        final List<Recipe> recommendations = chefExpress.recommend();
 
         assertTrue(recommendations.isEmpty());
     }
