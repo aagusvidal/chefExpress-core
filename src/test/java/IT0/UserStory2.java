@@ -64,8 +64,7 @@ public class UserStory2
                 List<RecipeScorer> scorers = scorerFactory.create(basePath + "oneImpl");
 
                 assert (scorers.size() == 1);
-                // TODO: Add a getName() method in the RecipeScorer interface.
-                assert (scorers.get(0).getClass().getName().equals("RecetasSaludables"));
+                assert (scorers.get(0).getName().equals("RecetasSaludables"));
         }
 
         @Description("Puntuador multiples")
