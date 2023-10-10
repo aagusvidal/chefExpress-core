@@ -21,7 +21,7 @@ public class UserStory1 {
     private ChefExpress chefExpress;
     private List<Recipe> unsortedRecipes;
     private List<Recipe> sortedRecipes;
-    private RecipeScorer scorerA;
+    private RecipeScorer scorerSaludable;
 
     @BeforeEach
     public void setUp() {
@@ -34,8 +34,8 @@ public class UserStory1 {
                 mockRecipe(2, "most-value-recipe"),
                 mockRecipe(1, "medium-value-recipe")
         );
-        scorerA = mock(RecipeScorer.class);
-        chefExpress = new ChefExpress(new HashSet<>(unsortedRecipes), scorerA);
+        scorerSaludable = mock(RecipeScorer.class);
+        chefExpress = new ChefExpress(new HashSet<>(unsortedRecipes), scorerSaludable);
     }
 
     @Test
@@ -48,7 +48,7 @@ public class UserStory1 {
                 2, 10
         );
         expectedScores.entrySet().stream().forEach(entry ->
-            when(scorerA.score(this.unsortedRecipes.get(entry.getKey())))
+            when(scorerSaludable.score(this.unsortedRecipes.get(entry.getKey())))
                     .thenReturn(entry.getValue())
         );
 
@@ -68,7 +68,7 @@ public class UserStory1 {
                 2, 10
         );
         expectedScores.entrySet().stream().forEach(entry ->
-                when(scorerA.score(this.unsortedRecipes.get(entry.getKey())))
+                when(scorerSaludable.score(this.unsortedRecipes.get(entry.getKey())))
                         .thenReturn(entry.getValue())
         );
 
@@ -89,7 +89,7 @@ public class UserStory1 {
     @Test
     @Description("Recomendación sin recetas")
     public void ca4RecomendacionSinRecetas() {
-        chefExpress = new ChefExpress(new HashSet<>(), scorerA);
+        chefExpress = new ChefExpress(new HashSet<>(), scorerSaludable);
 
         List<Recipe> recommendations = chefExpress.recommend();
 
@@ -101,9 +101,9 @@ public class UserStory1 {
     public void ca5RecetaSinPuntaje() {
         final Recipe recipe = mockRecipe(0, "not-scored-recipe");
         final Set<Recipe> unScoredRecipes = Set.of(recipe);
-        chefExpress = new ChefExpress(unScoredRecipes, scorerA);
+        chefExpress = new ChefExpress(unScoredRecipes, scorerSaludable);
 
-        when(scorerA.score(recipe)).thenReturn(0);
+        when(scorerSaludable.score(recipe)).thenReturn(0);
 
         final List<Recipe> recommendations = chefExpress.recommend();
 

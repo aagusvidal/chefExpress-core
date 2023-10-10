@@ -16,20 +16,18 @@ public class ChefExpressFactory
 {
     private RecipesFinder recipesFinder;
     private RecipeScorerFactory scorerFactory;
-    private Properties chefExpressProperties;
 
-    public ChefExpressFactory(String propertyPath)
+    public ChefExpressFactory()
     {
-        this.chefExpressProperties = loadProperties(propertyPath);
         this.scorerFactory = new RecipeScorerFactory();
-
         this.recipesFinder = new RecipesFinder();
     }
 
-    public ChefExpress createChefExpress() throws Exception
+    public ChefExpress createChefExpress(String propertyPath) throws Exception
     {
-        List<RecipeScorer> recipeScorers = this.scorerFactory.create(chefExpressProperties.getProperty("ScorersPath"));
+        Properties chefExpressProperties = loadProperties(propertyPath);
 
+        List<RecipeScorer> recipeScorers = this.scorerFactory.create(chefExpressProperties.getProperty("ScorersPath"));
         Set<Recipe> recipes = recipesFinder.findRecipes(chefExpressProperties.getProperty("RecipesPath"));
 
         return new ChefExpress(recipes, recipeScorers.get(0));
@@ -40,7 +38,7 @@ public class ChefExpressFactory
         Properties prop = new Properties();
         try
         {
-            prop.load( new FileInputStream(configPath) ); // Ex: "dir/chefExpress.properties"
+            prop.load( new FileInputStream(configPath) );
         } catch (IOException e) { e.printStackTrace(); }
 
         return prop;
