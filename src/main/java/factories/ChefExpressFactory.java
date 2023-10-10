@@ -1,7 +1,7 @@
 package factories;
 
 import entities.Recipe;
-import finders.RecipeScorerFinder;
+import finders.RecipeScorerFactory;
 import interfaces.RecipeScorer;
 import core.ChefExpress;
 import core.ObservableChefExpress;
@@ -9,31 +9,30 @@ import parsers.RecipeParser;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Map;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
 public class ChefExpressFactory
 {
     private RecipeParser recipeParser;
-    private RecipeScorerFinder scorerFinder;
-    private String defaultScorerName;
+    private RecipeScorerFactory scorerFactory;
+    private Properties chefExpressProperties;
 
     public ChefExpressFactory(String propertyPath)
     {
-        Properties chefExpressProperties = loadProperties(propertyPath);
-
-        this.scorerFinder = new RecipeScorerFinder(chefExpressProperties.getProperty("ScorersPath"));
+        this.chefExpressProperties = loadProperties(propertyPath);
+        this.scorerFactory = new RecipeScorerFactory();
         this.recipeParser = new RecipeParser(chefExpressProperties.getProperty("RecipesPath"));
-        this.defaultScorerName = chefExpressProperties.getProperty("DefaultScorer");
     }
 
     public ObservableChefExpress createChefExpress() throws Exception
     {
-        Map<String, RecipeScorer> recipeScorers = scorerFinder.find();
+        List<RecipeScorer> recipeScorers = this.scorerFactory.create(chefExpressProperties.getProperty("ScorersPath"));
+
         Set<Recipe> recipes = recipeParser.parseRecipes();
 
-        ChefExpress recommend = new ChefExpress(recipes, recipeScorers.get(defaultScorerName));
+        ChefExpress recommend = new ChefExpress(recipes, recipeScorers.get(0));
 
         return new ObservableChefExpress(recommend);
     }

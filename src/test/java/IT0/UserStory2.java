@@ -1,12 +1,12 @@
 package IT0;
 
-import finders.RecipeScorerFinder;
+import finders.RecipeScorerFactory;
 import interfaces.RecipeScorer;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.Test;
-
 import java.io.FileNotFoundException;
-import java.util.Map;
+import java.util.List;
+
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -21,7 +21,7 @@ public class UserStory2
                 assertThrows(FileNotFoundException.class,
                         ()->
                         {
-                                new RecipeScorerFinder("NoExiste").find();
+                                new RecipeScorerFactory().create("NoExiste");
                         });
         }
 
@@ -33,7 +33,7 @@ public class UserStory2
                 assertThrows(IllegalArgumentException.class,
                         ()->
                         {
-                                new RecipeScorerFinder(basePath + "archivo.txt").find();
+                                new RecipeScorerFactory().create(basePath + "archivo.txt");
                         });
 
         }
@@ -42,39 +42,41 @@ public class UserStory2
         @Test
         public void ca3CarpetaVacia() throws Exception
         {
-                RecipeScorerFinder finder = new RecipeScorerFinder(basePath + "carpetaVacia");
-                Map<String, RecipeScorer> scorers = finder.find();
-                assert (scorers.isEmpty());
+                RecipeScorerFactory scorerFactory = new RecipeScorerFactory();
+                assert (scorerFactory.create(basePath + "carpetaVacia").isEmpty());
         }
 
         @Description("No es criterio de puntuacion")
         @Test
         public void ca4NoEsCriterioDePuntuacion() throws Exception
         {
-                RecipeScorerFinder finder = new RecipeScorerFinder(basePath + "noEsCriterio");
-                assert (finder.find().isEmpty());
+                RecipeScorerFactory scorerFactory = new RecipeScorerFactory();
+                assert (scorerFactory.create(basePath + "noEsCriterio").isEmpty());
         }
 
         @Description("Puntuador simple")
         @Test
         public void ca5PuntuadorSimple() throws Exception
         {
-                RecipeScorerFinder finder = new RecipeScorerFinder(basePath + "oneImpl");
-                Map<String, RecipeScorer> scorers = finder.find();
+                RecipeScorerFactory scorerFactory = new RecipeScorerFactory();
+
+                List<RecipeScorer> scorers = scorerFactory.create(basePath + "oneImpl");
 
                 assert (scorers.size() == 1);
-                assert (scorers.containsKey("RecetasSaludables"));
+                // TODO: Add a getName() method in the RecipeScorer interface.
+                assert (scorers.get(0).getClass().getName().equals("RecetasSaludables"));
         }
 
         @Description("Puntuador multiples")
         @Test
         public void ca6PuntuadoresMultiples() throws Exception
         {
-                RecipeScorerFinder finder = new RecipeScorerFinder(basePath + "twoImpl");
-                Map<String, RecipeScorer> scorers = finder.find();
+                RecipeScorerFactory scorerFactory = new RecipeScorerFactory();
+                List<RecipeScorer> scorers = scorerFactory.create(basePath + "twoImpl");
 
                 assert (scorers.size() == 2);
-                assert (scorers.containsKey("RecetasSaludables"));
-                assert (scorers.containsKey("Diabeticos"));
+                // TODO: Add a getName() method in the RecipeScorer interface.
+                assert (scorers.get(0).getClass().getName().equals("RecetasSaludables"));
+                assert (scorers.get(1).getClass().getName().equals("Diabeticos"));
         }
 }

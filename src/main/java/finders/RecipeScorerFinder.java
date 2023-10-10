@@ -23,6 +23,21 @@ public class RecipeScorerFinder
         this.directory = url;
     }
 
+    public  Set<Class<?>>  find(String directory) throws FileNotFoundException
+    {
+        File file = new File(directory);
+
+        if (!file.exists())
+            throw  new FileNotFoundException();
+
+        if(!file.isDirectory())
+            throw  new IllegalArgumentException();
+
+        List<File> jars = getJars(file);
+
+        return findClassesInJar(jars);
+    }
+
     public  Map<String, RecipeScorer>  find() throws FileNotFoundException
     {
         Map<String, RecipeScorer> scorers = new HashMap<>();
