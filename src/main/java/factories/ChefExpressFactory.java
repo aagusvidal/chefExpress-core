@@ -4,7 +4,6 @@ import entities.Recipe;
 import finders.RecipeScorerFactory;
 import interfaces.RecipeScorer;
 import core.ChefExpress;
-import core.ObservableChefExpress;
 import parsers.RecipeParser;
 
 import java.io.FileInputStream;
@@ -26,15 +25,13 @@ public class ChefExpressFactory
         this.recipeParser = new RecipeParser(chefExpressProperties.getProperty("RecipesPath"));
     }
 
-    public ObservableChefExpress createChefExpress() throws Exception
+    public ChefExpress createChefExpress() throws Exception
     {
         List<RecipeScorer> recipeScorers = this.scorerFactory.create(chefExpressProperties.getProperty("ScorersPath"));
 
         Set<Recipe> recipes = recipeParser.parseRecipes();
 
-        ChefExpress recommend = new ChefExpress(recipes, recipeScorers.get(0));
-
-        return new ObservableChefExpress(recommend);
+        return new ChefExpress(recipes, recipeScorers.get(0));
     }
 
     private Properties loadProperties(String configPath)
