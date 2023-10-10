@@ -5,6 +5,7 @@ import interfaces.RecipeScorer;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.Test;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -74,9 +75,12 @@ public class UserStory2
                 RecipeScorerFactory scorerFactory = new RecipeScorerFactory();
                 List<RecipeScorer> scorers = scorerFactory.create(basePath + "twoImpl");
 
+                List<String> scorersNames = new ArrayList<>(
+                                                List.of(scorers.get(0).getName(),
+                                                        scorers.get(1).getName())
+                                                );
+
                 assert (scorers.size() == 2);
-                // TODO: Add a getName() method in the RecipeScorer interface.
-                assert (scorers.get(0).getClass().getName().equals("RecetasSaludables"));
-                assert (scorers.get(1).getClass().getName().equals("Diabeticos"));
+                assert(scorersNames.containsAll(List.of("Diabeticos","RecetasSaludables")));
         }
 }
