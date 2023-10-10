@@ -14,14 +14,11 @@ import java.util.stream.Collectors;
 
 public class RecipeScorerFinder
 {
-    public String directory;
     private static final String validFileExtension = ".jar";
 
 
-    public RecipeScorerFinder(String url)
-    {
-        this.directory = url;
-    }
+    public RecipeScorerFinder()
+    {}
 
     public  Set<Class<?>>  find(String directory) throws FileNotFoundException
     {
@@ -36,35 +33,6 @@ public class RecipeScorerFinder
         List<File> jars = getJars(file);
 
         return findClassesInJar(jars);
-    }
-
-    public  Map<String, RecipeScorer>  find() throws FileNotFoundException
-    {
-        Map<String, RecipeScorer> scorers = new HashMap<>();
-
-        File file = new File(this.directory);
-
-        if (!file.exists())
-            throw  new FileNotFoundException();
-
-        if(!file.isDirectory())
-            throw  new IllegalArgumentException();
-
-        List<File> jars = getJars(file);
-
-        try
-        {
-            Set<Class<?>> classes = findClassesInJar(jars);
-
-            for(Class<?> aClass : classes)
-            {
-                if (RecipeScorer.class.isAssignableFrom(aClass))
-                    scorers.put(aClass.getName(), (RecipeScorer) aClass.getDeclaredConstructor().newInstance() );
-            }
-        }
-        catch ( Exception e) { throw new RuntimeException(e); }
-
-        return scorers;
     }
 
     private Set<Class<?>> findClassesInJar(List<File> filejars)

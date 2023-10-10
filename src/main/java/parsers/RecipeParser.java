@@ -10,20 +10,18 @@ import java.util.Set;
 
 public class RecipeParser {
     private ObjectMapper objectMapper;
-    private String filePath;
 
-    public RecipeParser(String filePath)
+    public RecipeParser()
     {
         objectMapper = new ObjectMapper();
-        this.filePath = filePath;
     }
 
-    public Set<Recipe> parseRecipes()
+    public Set<Recipe> parseRecipes(String filePath)
     {
         Set<Recipe> recipes = new HashSet<Recipe>();
         try
         {
-            InputStream inputStream = RecipeParser.class.getResourceAsStream(this.filePath);
+            InputStream inputStream = RecipeParser.class.getResourceAsStream(filePath);
             TypeReference<Set<Recipe>> typeReference = new TypeReference<Set<Recipe>>() {};
             recipes = objectMapper.readValue(inputStream, typeReference);
 

@@ -10,7 +10,7 @@ public class RecipeScorerFactory
 {
     public List<RecipeScorer> create(String directory) throws FileNotFoundException
     {
-        Set<Class<?>> classes = new RecipeScorerFinder(directory).find(directory);
+        Set<Class<?>> classes = new RecipeScorerFinder().find(directory);
         List<RecipeScorer> scorers = new ArrayList<>();
 
         for(Class<?> aClass : classes)
