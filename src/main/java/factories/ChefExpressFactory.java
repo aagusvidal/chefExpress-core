@@ -17,6 +17,7 @@ public class ChefExpressFactory
     private RecipesFinder recipesFinder;
     private RecipeScorerFactory scorerFactory;
 
+    private List<RecipeScorer> recipeScorers;
     public ChefExpressFactory()
     {
         this.scorerFactory = new RecipeScorerFactory();
@@ -26,8 +27,7 @@ public class ChefExpressFactory
     public ChefExpress createChefExpress(String propertyPath) throws Exception
     {
         Properties chefExpressProperties = loadProperties(propertyPath);
-
-        List<RecipeScorer> recipeScorers = this.scorerFactory.create(chefExpressProperties.getProperty("ScorersPath"));
+        recipeScorers = this.scorerFactory.create(chefExpressProperties.getProperty("ScorersPath"));
         Set<Recipe> recipes = recipesFinder.findRecipes(chefExpressProperties.getProperty("RecipesPath"));
 
         return new ChefExpress(recipes, recipeScorers.get(0));
@@ -44,4 +44,7 @@ public class ChefExpressFactory
         return prop;
     }
 
+    public List<RecipeScorer> getRecipeScorers() {
+        return recipeScorers;
+    }
 }

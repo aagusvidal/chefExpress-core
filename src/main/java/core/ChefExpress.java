@@ -53,4 +53,7 @@ public class ChefExpress
         support.firePropertyChange("Recommendations", this.recommendations, recommendations);
         this.recommendations = recommendations;
     }
+    public void setScorer(RecipeScorer scorer) {
+        this.scorer = scorer;
+    }
 }
