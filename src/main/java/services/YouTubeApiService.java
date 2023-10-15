@@ -2,6 +2,7 @@ package services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -25,7 +26,9 @@ public class YouTubeApiService {
 
             if (connection.getResponseCode() == SUCCESS_STATUS_CODE) {
                 InputStream inputStream = connection.getInputStream();
-                byte[] bytes = inputStream.readAllBytes();
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                inputStream.transferTo(byteArrayOutputStream);
+                byte[] bytes = byteArrayOutputStream.toByteArray();
                 ObjectMapper mapper = new ObjectMapper();
                 return Optional.of(mapper.readValue(bytes, SearchListResponse.class));
             }
