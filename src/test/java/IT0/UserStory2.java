@@ -64,7 +64,7 @@ public class UserStory2
                 List<RecipeScorer> scorers = scorerFactory.create(basePath + "oneImpl");
 
                 assert (scorers.size() == 1);
-                assert (scorers.get(0).getName().equals("RecetasSaludables"));
+                assert (scorers.get(0).getName().equals("Saludables"));
         }
 
         @Description("Puntuador multiples")
@@ -80,6 +80,6 @@ public class UserStory2
                                                 );
 
                 assert (scorers.size() == 2);
-                assert(scorersNames.containsAll(List.of("Apto Celiaco","RecetasSaludables")));
+                assert(scorersNames.containsAll(List.of("Sin TACC","Saludables")));
         }
 }
