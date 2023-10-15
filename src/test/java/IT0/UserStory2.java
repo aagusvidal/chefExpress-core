@@ -80,6 +80,6 @@ public class UserStory2
                                                 );
 
                 assert (scorers.size() == 2);
-                assert(scorersNames.containsAll(List.of("Diabeticos","RecetasSaludables")));
+                assert(scorersNames.containsAll(List.of("Apto Celíaco","RecetasSaludables")));
         }
 }
