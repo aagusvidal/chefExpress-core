@@ -14,6 +14,7 @@ public class ChefExpress
 {
     private PropertyChangeSupport support;
     protected Set<Recipe> recipes;
+
     protected RecipeScorer scorer;
     private List<Recipe> recommendations;
     private final int recipesLimit;
@@ -55,5 +56,9 @@ public class ChefExpress
     }
     public void setScorer(RecipeScorer scorer) {
         this.scorer = scorer;
+    }
+
+    public RecipeScorer getScorer() {
+        return scorer;
     }
 }
