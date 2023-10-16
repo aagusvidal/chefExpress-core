@@ -1,7 +1,7 @@
 package factories;
 
 import entities.Recipe;
-import finders.RecipeScorerFactory;
+import finders.YTVideoLinkSearcher;
 import interfaces.RecipeScorer;
 import core.ChefExpress;
 import parsers.RecipesFinder;
@@ -17,11 +17,14 @@ public class ChefExpressFactory
     private RecipesFinder recipesFinder;
     private RecipeScorerFactory scorerFactory;
 
+    private VideoLinkSearcherFactory videoFinderFactory;
+
     private List<RecipeScorer> recipeScorers;
     public ChefExpressFactory()
     {
         this.scorerFactory = new RecipeScorerFactory();
         this.recipesFinder = new RecipesFinder();
+        this.videoFinderFactory = new VideoLinkSearcherFactory();
     }
 
     public ChefExpress createChefExpress(String propertyPath) throws Exception
@@ -30,7 +33,10 @@ public class ChefExpressFactory
         recipeScorers = this.scorerFactory.create(chefExpressProperties.getProperty("ScorersPath"));
         Set<Recipe> recipes = recipesFinder.findRecipes(chefExpressProperties.getProperty("RecipesPath"));
 
-        return new ChefExpress(recipes, recipeScorers.get(0));
+        Properties videoFinderProperties = loadProperties(chefExpressProperties.getProperty("VideoFinderProperties"));
+        YTVideoLinkSearcher videoFinder= this.videoFinderFactory.create(videoFinderProperties);
+
+        return new ChefExpress(recipes, recipeScorers.get(0), videoFinder);
     }
 
     private Properties loadProperties(String configPath)

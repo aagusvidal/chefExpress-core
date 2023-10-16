@@ -1,5 +1,6 @@
-package finders;
+package factories;
 
+import finders.RecipeScorerFinder;
 import interfaces.RecipeScorer;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;

@@ -52,4 +52,13 @@ public class Recipe {
 		if (!name.equals(recipe.name)) return false;
 		return ingredients.equals(recipe.ingredients);
 	}
+
+	@Override
+	public String toString() {
+		return "Recipe{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", ingredients=" + ingredients +
+				'}';
+	}
 }

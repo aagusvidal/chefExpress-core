@@ -1,4 +1,4 @@
-package services;
+package services.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

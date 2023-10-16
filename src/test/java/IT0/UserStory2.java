@@ -1,6 +1,6 @@
 package IT0;
 
-import finders.RecipeScorerFactory;
+import factories.RecipeScorerFactory;
 import interfaces.RecipeScorer;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.Test;

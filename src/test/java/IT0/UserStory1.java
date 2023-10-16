@@ -1,6 +1,8 @@
 package IT0;
 
 import entities.Recipe;
+import entities.Recommendation;
+import finders.YTVideoLinkSearcher;
 import interfaces.RecipeScorer;
 import jdk.jfr.Description;
 import core.ChefExpress;
@@ -20,8 +22,9 @@ import static org.mockito.Mockito.when;
 public class UserStory1 {
     private ChefExpress chefExpress;
     private List<Recipe> unsortedRecipes;
-    private List<Recipe> sortedRecipes;
+    private List<Recommendation> sortedRecommendations;
     private RecipeScorer scorerSaludable;
+    private YTVideoLinkSearcher videoLinkSearcher;
 
     @BeforeEach
     public void setUp() {
@@ -30,12 +33,13 @@ public class UserStory1 {
                 mockRecipe(1, "medium-value-recipe"),
                 mockRecipe(2, "most-value-recipe")
         );
-        sortedRecipes = List.of(
-                mockRecipe(2, "most-value-recipe"),
-                mockRecipe(1, "medium-value-recipe")
+        sortedRecommendations = List.of(
+                mockRecommendation("url",mockRecipe(2, "most-value-recipe")),
+                mockRecommendation("url",  mockRecipe(1, "medium-value-recipe"))
         );
         scorerSaludable = mock(RecipeScorer.class);
-        chefExpress = new ChefExpress(new HashSet<>(unsortedRecipes), scorerSaludable);
+        videoLinkSearcher = mock(YTVideoLinkSearcher.class);
+        chefExpress = new ChefExpress(new HashSet<>(unsortedRecipes), scorerSaludable, videoLinkSearcher);
     }
 
     @Test
@@ -48,67 +52,75 @@ public class UserStory1 {
                 2, 10
         );
         expectedScores.entrySet().stream().forEach(entry ->
-            when(scorerSaludable.score(this.unsortedRecipes.get(entry.getKey())))
-                    .thenReturn(entry.getValue())
-        );
-
-        List<Recipe> recommendations = chefExpress.recommend();
-
-        assertEquals(recipesLimit, recommendations.size());
-        assertEquals(sortedRecipes, recommendations);
-    }
-
-    @Test
-    @Description("Recomendación  de una receta")
-    public void ca2RecomendacionDeUnaReceta() {
-        final int expectedRecipesLimit = 1;
-        final Map<Integer, Integer> expectedScores = Map.of(
-                0, 0,
-                1, 0,
-                2, 10
-        );
-        expectedScores.entrySet().stream().forEach(entry ->
                 when(scorerSaludable.score(this.unsortedRecipes.get(entry.getKey())))
                         .thenReturn(entry.getValue())
         );
 
-        List<Recipe> recommendations = chefExpress.recommend();
+        sortedRecommendations.stream().forEach(r ->
+                when(videoLinkSearcher.searchLink(r.getRecipe().getName()))
+                        .thenReturn("url"));
 
-        assertEquals(expectedRecipesLimit, recommendations.size());
-        assertEquals(this.unsortedRecipes.get(2), recommendations.get(0));
+        List<Recommendation> recommendations = chefExpress.recommend();
+
+        assertEquals(recipesLimit, recommendations.size());
+        assertEquals(sortedRecommendations, recommendations);
     }
 
-    @Test
-    @Description("No se recomiendan recetas")
-    public void ca3NoSeRecomiendanRecetas() {
-        List<Recipe> recommendations = chefExpress.recommend();
 
-        assertTrue(recommendations.isEmpty());
-    }
+        @Test
+        @Description("Recomendación  de una receta")
+        public void ca2RecomendacionDeUnaReceta() {
+            Recommendation expectedRecommendation = new Recommendation("url", this.unsortedRecipes.get(2));
+            final int expectedRecipesLimit = 1;
+            final Map<Integer, Integer> expectedScores = Map.of(
+                    0, 0,
+                    1, 0,
+                    2, 10
+            );
+            expectedScores.entrySet().stream().forEach(entry ->
+                    when(scorerSaludable.score(this.unsortedRecipes.get(entry.getKey())))
+                            .thenReturn(entry.getValue())
+            );
 
-    @Test
-    @Description("Recomendación sin recetas")
-    public void ca4RecomendacionSinRecetas() {
-        chefExpress = new ChefExpress(new HashSet<>(), scorerSaludable);
+            when(videoLinkSearcher.searchLink("most-value-recipe")).thenReturn("url");
 
-        List<Recipe> recommendations = chefExpress.recommend();
+            List<Recommendation> recommendations = chefExpress.recommend();
 
-        assertTrue(recommendations.isEmpty());
-    }
+            assertEquals(expectedRecipesLimit, recommendations.size());
+            assertEquals(expectedRecommendation, recommendations.get(0));
+        }
 
-    @Test
-    @Description("Recetas sin puntaje")
-    public void ca5RecetaSinPuntaje() {
-        final Recipe recipe = mockRecipe(0, "not-scored-recipe");
-        final Set<Recipe> unScoredRecipes = Set.of(recipe);
-        chefExpress = new ChefExpress(unScoredRecipes, scorerSaludable);
+        @Test
+        @Description("No se recomiendan recetas")
+        public void ca3NoSeRecomiendanRecetas() {
+            List<Recommendation> recommendations = chefExpress.recommend();
 
-        when(scorerSaludable.score(recipe)).thenReturn(0);
+            assertTrue(recommendations.isEmpty());
+        }
 
-        final List<Recipe> recommendations = chefExpress.recommend();
+        @Test
+        @Description("Recomendación sin recetas")
+        public void ca4RecomendacionSinRecetas() {
+            chefExpress = new ChefExpress(new HashSet<>(), scorerSaludable, videoLinkSearcher);
 
-        assertTrue(recommendations.isEmpty());
-    }
+            List<Recommendation> recommendations = chefExpress.recommend();
+
+            assertTrue(recommendations.isEmpty());
+        }
+
+        @Test
+        @Description("Recetas sin puntaje")
+        public void ca5RecetaSinPuntaje() {
+            final Recipe recipe = mockRecipe(0, "not-scored-recipe");
+            final Set<Recipe> unScoredRecipes = Set.of(recipe);
+            chefExpress = new ChefExpress(unScoredRecipes, scorerSaludable, videoLinkSearcher);
+
+            when(scorerSaludable.score(recipe)).thenReturn(0);
+
+            final List<Recommendation> recommendations = chefExpress.recommend();
+
+            assertTrue(recommendations.isEmpty());
+        }
 
     private Recipe mockRecipe(int id, String name) {
         Map<String, Float> ingredients = Map.of(
@@ -117,5 +129,9 @@ public class UserStory1 {
                 "ingredient-3", 30.0f
         );
         return new Recipe(id, name, ingredients);
+    }
+
+    private Recommendation mockRecommendation(String link, Recipe recipe) {
+        return new Recommendation(link, recipe);
     }
 }

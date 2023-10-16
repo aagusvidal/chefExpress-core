@@ -1,4 +1,4 @@
-package services;
+package services.entities;
 
 public class PageInfo {
     private int totalResults;
