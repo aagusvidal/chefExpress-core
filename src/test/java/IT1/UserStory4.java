@@ -2,6 +2,7 @@ package IT1;
 
 import core.ChefExpress;
 import entities.Recipe;
+import finders.YTVideoLinkSearcher;
 import interfaces.RecipeScorer;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +21,7 @@ public class UserStory4 {
     private List<Recipe> unsortedRecipes;
 
     private RecipeScorer scorerSaludable;
+    private YTVideoLinkSearcher videoLinkSearcher;
 
     @BeforeEach
     public void setUp() {
@@ -29,7 +31,8 @@ public class UserStory4 {
                 mockRecipe(2, "most-value-recipe")
         );
         scorerSaludable = mock(RecipeScorer.class);
-        chefExpress = new ChefExpress(new HashSet<>(unsortedRecipes), scorerSaludable);
+        videoLinkSearcher = mock(YTVideoLinkSearcher.class);
+        chefExpress = new ChefExpress(new HashSet<>(unsortedRecipes), scorerSaludable, videoLinkSearcher);
     }
 
     @Test
