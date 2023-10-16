@@ -19,7 +19,6 @@ import static org.mockito.Mockito.mock;
 public class UserStory4 {
     private ChefExpress chefExpress;
     private List<Recipe> unsortedRecipes;
-
     private RecipeScorer scorerSaludable;
     private YTVideoLinkSearcher videoLinkSearcher;
 

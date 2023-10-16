@@ -1,16 +1,18 @@
-package parsers;
+package finders;
 
 import entities.Recipe;
+import interfaces.RecipesFinder;
+import parsers.RecipeParser;
 
 import java.util.Set;
 
-public class RecipesFinder
-{
+public class LocalRecipesFinder implements RecipesFinder {
     private RecipeParser recipeParser;
-    public RecipesFinder()
+    public LocalRecipesFinder()
     {
         recipeParser = new RecipeParser();
     }
+
 
     public Set<Recipe> findRecipes(String filePath)
     {
