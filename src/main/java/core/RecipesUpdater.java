@@ -52,6 +52,9 @@ public class RecipesUpdater {
     public void updateRecipes() {
         int number = Math.max(0, this.paths.size() - 1);
         int randomIndex = new Random().nextInt(number + 1 );
-        setRecipes(this.recipesFinder.findRecipes(this.paths.get(randomIndex)));
+        Set<Recipe> recipes = this.recipesFinder.findRecipes(this.paths.get(randomIndex));
+        System.out.println("Recipes!");
+        System.out.println(recipes);
+        setRecipes(recipes);
     }
 }
