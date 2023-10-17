@@ -31,13 +31,16 @@ public class ChefExpress implements PropertyChangeListener {
     }
 
     public List<Recommendation> recommend() {
-        return this.recipes
+        List<Recommendation> recommendations = this.recipes
                 .stream()
                 .filter(recipe -> scorer.score(recipe) != 0)
                 .sorted((r1, r2) -> scorer.score(r2) - scorer.score(r1))
                 .map(recipe -> new Recommendation(this.videoLinkFinder.searchLink(recipe.getName()), recipe))
                 .limit(this.recipesLimit)
                 .collect(Collectors.toList());
+
+        setRecommendations(recommendations);
+        return recommendations;
     }
 
     public void attach(PropertyChangeListener pcl) {
