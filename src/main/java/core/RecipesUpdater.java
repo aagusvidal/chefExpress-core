@@ -23,7 +23,7 @@ public class RecipesUpdater {
         this.paths = paths;
         this.support = new PropertyChangeSupport(this);
         this.recipes = new HashSet<>();
-        Set<Recipe> recipes = this.recipesFinder.findRecipes(this.paths.get(0));
+//        Set<Recipe> recipes = this.recipesFinder.findRecipes(this.paths.get(0));
 //        System.out.println("Recipes!");
 //        System.out.println(recipes);
         this.executeUpdateScheduleTask(updateTime);
@@ -60,9 +60,10 @@ public class RecipesUpdater {
         int number = Math.max(0, this.paths.size() - 1);
         int randomIndex = new Random().nextInt(number + 1 );
         System.out.println(randomIndex);
-        Set<Recipe> recipes = this.recipesFinder.findRecipes(this.paths.get(randomIndex));
-        System.out.println("Recipes!");
-        System.out.println(recipes);
-        setRecipes(recipes);
+        System.out.println(this.recipesFinder.findRecipes(this.paths.get(randomIndex)));
+//        Set<Recipe> recipes = this.recipesFinder.findRecipes(this.paths.get(randomIndex));
+//        System.out.println("Recipes!");
+//        System.out.println(recipes);
+//        setRecipes(recipes);
     }
 }
