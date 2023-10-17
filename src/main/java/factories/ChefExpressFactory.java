@@ -39,7 +39,7 @@ public class ChefExpressFactory
         ChefExpress chefExpress = new ChefExpress(recipes, recipeScorers.get(0), videoFinder);
 
         String recipesPath = chefExpressProperties.getProperty("RecipesUpdaterPath");
-        RecipesUpdater recipesUpdater = new RecipesUpdater(20L, recipesLocalFinder, List.of(recipesPath.split(",")));
+        RecipesUpdater recipesUpdater = new RecipesUpdater(1L, recipesLocalFinder, List.of(recipesPath.split(",")));
         recipesUpdater.attach(chefExpress);
 
         return chefExpress;
