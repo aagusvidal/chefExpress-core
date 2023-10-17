@@ -14,15 +14,9 @@ public class YTVideoLinkSearcher {
 
     public String searchLink(String query) {
         String queryPrefix = "receta de ";
-        String videoID =  this.ytService.getResults(queryPrefix + query)
-                .orElseThrow(RuntimeException::new)
-                .getItems()
-                .stream()
-                .findFirst()
-                .orElseThrow(RuntimeException::new)
-                .getId()
-                .getVideoId();
-        return YT_BASE_PATH + "?v=" + videoID;
+        String videoID =  this.ytService.getResults(queryPrefix + query).stream().findFirst().orElse(null);
+
+        return videoID == null ? "" : YT_BASE_PATH + videoID ;
 
     }
 }

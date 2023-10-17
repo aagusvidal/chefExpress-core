@@ -2,7 +2,7 @@ package services.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SearchResult {
+public class SearchYTItem {
 
     private String kind;
     private String etag;

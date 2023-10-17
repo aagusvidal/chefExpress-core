@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SearchListResponse {
+public class SearchYTResponse {
     private String kind;
     private String etag;
     private String nextPageToken;
     private String regionCode;
     private PageInfo pageInfo;
-    private List<SearchResult> items;
+    private List<SearchYTItem> items;
 
     public String getKind() {
         return kind;
@@ -53,11 +53,11 @@ public class SearchListResponse {
         this.pageInfo = pageInfo;
     }
 
-    public List<SearchResult> getItems() {
+    public List<SearchYTItem> getItems() {
         return items;
     }
 
-    public void setItems(List<SearchResult> items) {
+    public void setItems(List<SearchYTItem> items) {
         this.items = items;
     }
 

@@ -1,14 +1,16 @@
 package services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import services.entities.SearchListResponse;
+import services.entities.SearchYTResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
-import java.util.Properties;
+import java.util.stream.Collectors;
 
 public class YTService {
 
@@ -21,7 +23,7 @@ public class YTService {
         this.YT_API_KEY = apiKey;
     }
 
-    public Optional<SearchListResponse> getResults(String query) {
+    public List<String> getResults(String query) {
         try {
             String encodedQuery = java.net.URLEncoder.encode(query, "UTF-8");
             URL url = new URL(YT_API_PATH + "?key=" + YT_API_KEY + "&q=" + encodedQuery);
@@ -32,11 +34,12 @@ public class YTService {
                 InputStream inputStream = connection.getInputStream();
                 byte[] bytes = inputStream.readAllBytes();
                 ObjectMapper mapper = new ObjectMapper();
-                return Optional.of(mapper.readValue(bytes, SearchListResponse.class));
+                SearchYTResponse search = mapper.readValue(bytes, SearchYTResponse.class);
+                return search.getItems().stream().map(i -> i.getId().getVideoId()).collect(Collectors.toList());
             }
-            return Optional.empty();
+            return Collections.emptyList();
         } catch (IOException e) {
-            return Optional.empty();
+            return Collections.emptyList();
         }
     }
 }
