@@ -21,9 +21,9 @@ public class RecipesUpdater {
         this.recipesFinder = recipesFinder;
         this.paths = paths;
         this.support = new PropertyChangeSupport(this);
-        Set<Recipe> recipes = this.recipesFinder.findRecipes(this.paths.get(0));
-        System.out.println("Recipes!");
-        System.out.println(recipes);
+//        Set<Recipe> recipes = this.recipesFinder.findRecipes(this.paths.get(0));
+//        System.out.println("Recipes!");
+//        System.out.println(recipes);
         this.executeUpdateScheduleTask(updateTime);
     }
 
