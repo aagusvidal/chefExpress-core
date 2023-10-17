@@ -21,6 +21,9 @@ public class RecipesUpdater {
         this.recipesFinder = recipesFinder;
         this.paths = paths;
         this.support = new PropertyChangeSupport(this);
+        Set<Recipe> recipes = this.recipesFinder.findRecipes(this.paths.get(0));
+        System.out.println("Recipes!");
+        System.out.println(recipes);
         this.executeUpdateScheduleTask(updateTime);
     }
 
@@ -41,6 +44,7 @@ public class RecipesUpdater {
     }
 
     private void executeUpdateScheduleTask(Long updateTime) {
+        System.out.println("Thread");
         Executors.newSingleThreadScheduledExecutor()
                 .scheduleAtFixedRate(getTask(), 0, updateTime, TimeUnit.MINUTES);
     }
