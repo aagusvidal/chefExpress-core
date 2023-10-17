@@ -52,6 +52,7 @@ public class RecipesUpdater {
     }
 
     private Runnable getTask() {
+        System.out.println("Execution!");
         return this::updateRecipes;
     }
 
