@@ -24,6 +24,7 @@ public class ChefExpressFactory
     {
         this.scorerFactory = new RecipeScorerFactory();
         this.recipesLocalFinder = new LocalRecipesFinder();
+        this.videoFinderFactory = new VideoLinkSearcherFactory();
     }
 
     public ChefExpress createChefExpress(String propertyPath) throws Exception
