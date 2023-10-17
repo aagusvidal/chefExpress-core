@@ -33,8 +33,11 @@ public class RecipesUpdater {
     }
 
     private void setRecipes(Set<Recipe> recipes) {
-        support.firePropertyChange("Recipes", this.recipes, recipes);
-        this.recipes = recipes;
+        if(! recipes.isEmpty())
+        {
+            support.firePropertyChange("Recipes", this.recipes, recipes);
+            this.recipes = recipes;
+        }
     }
 
     private void executeUpdateScheduleTask(Long updateTime) {

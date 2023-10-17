@@ -26,6 +26,7 @@ public class UserStory6
     private RecipesUpdater recipesUpdater;
     private Set<Recipe> uniqueRecipes;
     private Set<Recipe> noRecipes;
+    private Set<Recipe> baseRecipes;
 
     @BeforeEach
     public void setUp()
@@ -34,7 +35,8 @@ public class UserStory6
         this.noRecipes = new HashSet<>();
         RecipeScorer scorerSaludable = mock(RecipeScorer.class);
         YTVideoLinkSearcher videoLinkSearcher = mock(YTVideoLinkSearcher.class);
-        chefExpress = new ChefExpress(Set.of(mockRecipe(2, "R2")),scorerSaludable, videoLinkSearcher );
+        baseRecipes = Set.of(mockRecipe(2, "R2"));
+        chefExpress = new ChefExpress(baseRecipes,scorerSaludable, videoLinkSearcher );
     }
 
     @Test
@@ -43,6 +45,26 @@ public class UserStory6
         recipesUpdater = initRecipesUpdater(chefExpress, uniqueRecipes);
         recipesUpdater.updateRecipes();
         assertEquals(chefExpress.getRecipes(), uniqueRecipes);
+    }
+
+    @Test
+    public void ca2sinPropagacionDeRecetas()
+    {
+        recipesUpdater = initRecipesUpdater(chefExpress, noRecipes);
+        recipesUpdater.updateRecipes();
+
+        assertEquals(chefExpress.getRecipes(), baseRecipes);
+    }
+
+    @Test
+    public void ca3DesuscripcionDeObservadores()
+    {
+        recipesUpdater = initRecipesUpdater(chefExpress, uniqueRecipes);
+        recipesUpdater.detach(chefExpress);
+
+        recipesUpdater.updateRecipes();
+
+        assertEquals(chefExpress.getRecipes(), baseRecipes);
     }
 
     private RecipesUpdater initRecipesUpdater(ChefExpress chefExpress, Set<Recipe> recipes)
