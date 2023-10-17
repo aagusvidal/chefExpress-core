@@ -32,7 +32,7 @@ public class RecipesUpdater {
         support.removePropertyChangeListener(pcl);
     }
 
-    private void updateRecipes(Set<Recipe> recipes) {
+    private void setRecipes(Set<Recipe> recipes) {
         support.firePropertyChange("Recipes", this.recipes, recipes);
         this.recipes = recipes;
     }
@@ -43,11 +43,12 @@ public class RecipesUpdater {
     }
 
     private Runnable getTask() {
-        return () -> updateRecipes(getRandomRecipes());
+        return this::updateRecipes;
     }
 
-    private Set<Recipe> getRandomRecipes() {
-        int randomIndex = new Random().nextInt(this.paths.size() - 1) + 1;
-        return this.recipesFinder.findRecipes(this.paths.get(randomIndex));
+    public void updateRecipes() {
+        int number = Math.max(0, this.paths.size() - 1);
+        int randomIndex = new Random().nextInt(number + 1 );
+        setRecipes(this.recipesFinder.findRecipes(this.paths.get(randomIndex)));
     }
 }

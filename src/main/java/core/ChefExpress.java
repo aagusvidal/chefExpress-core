@@ -71,4 +71,6 @@ public class ChefExpress implements PropertyChangeListener {
     public void setRecipes(Set<Recipe> recipes) {
         this.recipes = recipes;
     }
+
+    public Set<Recipe> getRecipes(){return this.recipes;}
 }
