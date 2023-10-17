@@ -5,6 +5,7 @@ import interfaces.RecipesFinder;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -21,6 +22,7 @@ public class RecipesUpdater {
         this.recipesFinder = recipesFinder;
         this.paths = paths;
         this.support = new PropertyChangeSupport(this);
+        this.recipes = new HashSet<>();
 //        Set<Recipe> recipes = this.recipesFinder.findRecipes(this.paths.get(0));
 //        System.out.println("Recipes!");
 //        System.out.println(recipes);
