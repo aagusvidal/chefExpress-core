@@ -48,7 +48,7 @@ public class RecipesUpdater {
     private void executeUpdateScheduleTask(Long updateTime) {
         System.out.println("Thread");
         Executors.newSingleThreadScheduledExecutor()
-                .scheduleAtFixedRate(getTask(), 0, updateTime, TimeUnit.MINUTES);
+                .scheduleAtFixedRate(getTask(), 1, updateTime, TimeUnit.MINUTES);
     }
 
     private Runnable getTask() {
@@ -59,8 +59,8 @@ public class RecipesUpdater {
         System.out.println("Execution!");
         int number = Math.max(0, this.paths.size() - 1);
         int randomIndex = new Random().nextInt(number + 1 );
-        System.out.println(randomIndex);
-        System.out.println(this.recipesFinder.findRecipes(this.paths.get(randomIndex)));
+        setRecipes(this.recipesFinder.findRecipes(this.paths.get(randomIndex)));
+        // System.out.println(this.recipesFinder.findRecipes(this.paths.get(randomIndex)));
 //        Set<Recipe> recipes = this.recipesFinder.findRecipes(this.paths.get(randomIndex));
 //        System.out.println("Recipes!");
 //        System.out.println(recipes);
