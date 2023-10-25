@@ -13,6 +13,7 @@ import java.util.Properties;
 public class VideoRecipeRecommendatorBuilder
 {
     private ChefExpressInit chefExpressInit;
+    private ChefExpress chefExpress;
 
     public VideoRecipeRecommendatorBuilder()
     {
@@ -22,13 +23,15 @@ public class VideoRecipeRecommendatorBuilder
     public VideoRecipeRecommendator build(String propertyPath) throws Exception
     {
         Properties chefExpressProperties = loadProperties(propertyPath);;
-        ChefExpress chefExpress = this.chefExpressInit.initChefExpress(chefExpressProperties);
+        this.chefExpress = this.chefExpressInit.initChefExpress(chefExpressProperties);
 
         Properties videoFinderProperties = loadProperties(chefExpressProperties.getProperty("VideoFinderProperties"));
         VideoSearcher videoSearcher = new VideoSearcherFactory().create(videoFinderProperties);
 
         return new VideoRecipeRecommendator(videoSearcher, chefExpress);
     }
+
+    public ChefExpress getChefExpress(){ return chefExpress;}
 
     public List<RecipeScorer> getRecipeScorers() { return this.chefExpressInit.getRecipeScorers(); }
 
@@ -42,5 +45,4 @@ public class VideoRecipeRecommendatorBuilder
 
         return prop;
     }
-
 }
