@@ -36,7 +36,7 @@ public class ChefExpressFactory
 
         Properties videoFinderProperties = loadProperties(chefExpressProperties.getProperty("VideoFinderProperties"));
         YTVideoLinkSearcher videoFinder= this.videoFinderFactory.create(videoFinderProperties);
-        ChefExpress chefExpress = new ChefExpress(recipes, recipeScorers.get(0), videoFinder);
+        ChefExpress chefExpress = new ChefExpress(recipes, recipeScorers.get(0));
 
         String recipesPath = chefExpressProperties.getProperty("RecipesUpdaterPath");
         RecipesUpdater recipesUpdater = new RecipesUpdater(1L, recipesLocalFinder, List.of(recipesPath.split(",")));

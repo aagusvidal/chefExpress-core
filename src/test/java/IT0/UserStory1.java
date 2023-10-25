@@ -1,7 +1,6 @@
 package IT0;
 
 import entities.Recipe;
-import entities.Recommendation;
 import finders.YTVideoLinkSearcher;
 import interfaces.RecipeScorer;
 import jdk.jfr.Description;
@@ -19,10 +18,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class UserStory1 {
+public class UserStory1
+{
     private ChefExpress chefExpress;
     private List<Recipe> unsortedRecipes;
-    private List<Recommendation> sortedRecommendations;
+    private List<Recipe> sortedRecipes;
     private RecipeScorer scorerSaludable;
     private YTVideoLinkSearcher videoLinkSearcher;
 
@@ -33,13 +33,13 @@ public class UserStory1 {
                 mockRecipe(1, "medium-value-recipe"),
                 mockRecipe(2, "most-value-recipe")
         );
-        sortedRecommendations = List.of(
-                mockRecommendation("url",mockRecipe(2, "most-value-recipe")),
-                mockRecommendation("url",  mockRecipe(1, "medium-value-recipe"))
+        sortedRecipes = List.of(
+                mockRecipe(2, "most-value-recipe"),
+                mockRecipe(1, "medium-value-recipe")
         );
         scorerSaludable = mock(RecipeScorer.class);
         videoLinkSearcher = mock(YTVideoLinkSearcher.class);
-        chefExpress = new ChefExpress(new HashSet<>(unsortedRecipes), scorerSaludable, videoLinkSearcher);
+        chefExpress = new ChefExpress(new HashSet<>(unsortedRecipes), scorerSaludable);
     }
 
     @Test
@@ -56,21 +56,17 @@ public class UserStory1 {
                         .thenReturn(entry.getValue())
         );
 
-        sortedRecommendations.stream().forEach(r ->
-                when(videoLinkSearcher.searchLink(r.getRecipe().getName()))
-                        .thenReturn("url"));
+        List<Recipe> recipeRecommendations = chefExpress.recommend();
 
-        List<Recommendation> recommendations = chefExpress.recommend();
-
-        assertEquals(recipesLimit, recommendations.size());
-        assertEquals(sortedRecommendations, recommendations);
+        assertEquals(recipesLimit, recipeRecommendations.size());
+        assertEquals(sortedRecipes, recipeRecommendations);
     }
 
 
         @Test
         @Description("Recomendación  de una receta")
-        public void ca2RecomendacionDeUnaReceta() {
-            Recommendation expectedRecommendation = new Recommendation("url", this.unsortedRecipes.get(2));
+        public void ca2RecomendacionDeUnaReceta()
+        {
             final int expectedRecipesLimit = 1;
             final Map<Integer, Integer> expectedScores = Map.of(
                     0, 0,
@@ -82,28 +78,28 @@ public class UserStory1 {
                             .thenReturn(entry.getValue())
             );
 
-            when(videoLinkSearcher.searchLink("most-value-recipe")).thenReturn("url");
-
-            List<Recommendation> recommendations = chefExpress.recommend();
+            List<Recipe> recommendations = chefExpress.recommend();
 
             assertEquals(expectedRecipesLimit, recommendations.size());
-            assertEquals(expectedRecommendation, recommendations.get(0));
+            assertEquals(this.unsortedRecipes.get(2), recommendations.get(0));
         }
 
         @Test
         @Description("No se recomiendan recetas")
-        public void ca3NoSeRecomiendanRecetas() {
-            List<Recommendation> recommendations = chefExpress.recommend();
+        public void ca3NoSeRecomiendanRecetas()
+        {
+            List<Recipe> recommendations = chefExpress.recommend();
 
             assertTrue(recommendations.isEmpty());
         }
 
         @Test
         @Description("Recomendación sin recetas")
-        public void ca4RecomendacionSinRecetas() {
-            chefExpress = new ChefExpress(new HashSet<>(), scorerSaludable, videoLinkSearcher);
+        public void ca4RecomendacionSinRecetas()
+        {
+            chefExpress = new ChefExpress(new HashSet<>(), scorerSaludable);
 
-            List<Recommendation> recommendations = chefExpress.recommend();
+            List<Recipe> recommendations = chefExpress.recommend();
 
             assertTrue(recommendations.isEmpty());
         }
@@ -113,11 +109,11 @@ public class UserStory1 {
         public void ca5RecetaSinPuntaje() {
             final Recipe recipe = mockRecipe(0, "not-scored-recipe");
             final Set<Recipe> unScoredRecipes = Set.of(recipe);
-            chefExpress = new ChefExpress(unScoredRecipes, scorerSaludable, videoLinkSearcher);
+            chefExpress = new ChefExpress(unScoredRecipes, scorerSaludable);
 
             when(scorerSaludable.score(recipe)).thenReturn(0);
 
-            final List<Recommendation> recommendations = chefExpress.recommend();
+            final List<Recipe> recommendations = chefExpress.recommend();
 
             assertTrue(recommendations.isEmpty());
         }
@@ -129,9 +125,5 @@ public class UserStory1 {
                 "ingredient-3", 30.0f
         );
         return new Recipe(id, name, ingredients);
-    }
-
-    private Recommendation mockRecommendation(String link, Recipe recipe) {
-        return new Recommendation(link, recipe);
     }
 }

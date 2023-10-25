@@ -30,8 +30,7 @@ public class UserStory4 {
                 mockRecipe(2, "most-value-recipe")
         );
         scorerSaludable = mock(RecipeScorer.class);
-        videoLinkSearcher = mock(YTVideoLinkSearcher.class);
-        chefExpress = new ChefExpress(new HashSet<>(unsortedRecipes), scorerSaludable, videoLinkSearcher);
+        chefExpress = new ChefExpress(new HashSet<>(unsortedRecipes), scorerSaludable);
     }
 
     @Test

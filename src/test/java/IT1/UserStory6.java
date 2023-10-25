@@ -34,9 +34,8 @@ public class UserStory6
         this.uniqueRecipes = Set.of(mockRecipe(1, "R1"));
         this.noRecipes = new HashSet<>();
         RecipeScorer scorerSaludable = mock(RecipeScorer.class);
-        YTVideoLinkSearcher videoLinkSearcher = mock(YTVideoLinkSearcher.class);
         baseRecipes = Set.of(mockRecipe(2, "R2"));
-        chefExpress = new ChefExpress(baseRecipes,scorerSaludable, videoLinkSearcher );
+        chefExpress = new ChefExpress(baseRecipes,scorerSaludable );
     }
 
     @Test
