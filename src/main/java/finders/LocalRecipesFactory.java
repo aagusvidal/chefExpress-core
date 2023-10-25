@@ -1,14 +1,14 @@
 package finders;
 
 import entities.Recipe;
-import interfaces.RecipesFinder;
+import interfaces.RecipesFactory;
 import parsers.RecipeParser;
 
 import java.util.Set;
 
-public class LocalRecipesFinder implements RecipesFinder {
+public class LocalRecipesFactory implements RecipesFactory {
     private RecipeParser recipeParser;
-    public LocalRecipesFinder()
+    public LocalRecipesFactory()
     {
         recipeParser = new RecipeParser();
     }

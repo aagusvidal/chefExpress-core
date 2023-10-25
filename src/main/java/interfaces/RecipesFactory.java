@@ -4,6 +4,6 @@ import entities.Recipe;
 
 import java.util.Set;
 
-public interface RecipesFinder {
+public interface RecipesFactory {
     Set<Recipe> findRecipes(String filePath);
 }
