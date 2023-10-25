@@ -3,9 +3,9 @@ package factories;
 import core.ChefExpress;
 import core.RecipesUpdater;
 import entities.Recipe;
-import finders.LocalRecipesFinder;
+import finders.LocalRecipesFactory;
 import interfaces.RecipeScorer;
-import interfaces.RecipesFinder;
+import interfaces.RecipesFactory;
 
 import java.util.List;
 import java.util.Properties;
@@ -22,7 +22,7 @@ public class ChefExpressInit
 
     public ChefExpress initChefExpress(Properties chefExpressProperties) throws Exception
     {
-        RecipesFinder recipesLocalFinder = new LocalRecipesFinder();
+        RecipesFactory recipesLocalFinder = new LocalRecipesFactory();
         Set<Recipe> recipes = recipesLocalFinder.findRecipes(chefExpressProperties.getProperty("RecipesPath"));
 
         String chefExpressScorersPath = chefExpressProperties.getProperty("ScorersPath");
