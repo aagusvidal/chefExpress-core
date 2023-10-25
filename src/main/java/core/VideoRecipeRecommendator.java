@@ -3,6 +3,7 @@ package core;
 import entities.Recipe;
 import entities.Recommendation;
 import finders.VideoSearcher;
+import interfaces.RecipeScorer;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -19,7 +20,7 @@ public class VideoRecipeRecommendator implements PropertyChangeListener
     private PropertyChangeSupport support;
 
 
-    VideoRecipeRecommendator(VideoSearcher videoSearcher, ChefExpress chefExpress)
+    public VideoRecipeRecommendator(VideoSearcher videoSearcher, ChefExpress chefExpress)
     {
         this.chefExpress = chefExpress;
         this.chefExpress.attach(this);
@@ -66,5 +67,10 @@ public class VideoRecipeRecommendator implements PropertyChangeListener
         List<Recommendation> recommendations = createRecommendation(recipes);
 
         this.setRecommendations(recommendations);
+    }
+
+    public void setScorer(RecipeScorer scorer)
+    {
+        this.chefExpress.setScorer(scorer);
     }
 }

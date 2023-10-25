@@ -5,9 +5,10 @@ import services.YTService;
 
 import java.util.Properties;
 
-public class VideoLinkSearcherFactory {
-
-    public VideoSearcher create(Properties properties) {
+public class VideoSearcherFactory
+{
+    public VideoSearcher create(Properties properties)
+    {
         String ytApiPath = properties.getProperty("YTApiPath");
         String apiKey = properties.getProperty("YTApiKey");
         String ytBasePath = properties.getProperty("YTBasePath");
