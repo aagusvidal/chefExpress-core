@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class RecipeScorerFactory
+public class RecipeScorersFactory
 {
     public List<RecipeScorer> create(String directory) throws FileNotFoundException
     {

@@ -1,6 +1,6 @@
 package IT0;
 
-import factories.RecipeScorerFactory;
+import factories.RecipeScorersFactory;
 import interfaces.RecipeScorer;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.Test;
@@ -18,33 +18,33 @@ public class UserStory2 {
     @Description("Ubicacion inexistente")
     @Test
     public void ca1UbicacionInexistente() {
-        assertThrows(FileNotFoundException.class, () -> new RecipeScorerFactory().create("NoExiste"));
+        assertThrows(FileNotFoundException.class, () -> new RecipeScorersFactory().create("NoExiste"));
     }
 
     @Description("Ubicacion invalida")
     @Test
     public void ca2UbicacionInvalida() {
-        assertThrows(IllegalArgumentException.class, () -> new RecipeScorerFactory().create(basePath + "archivo.txt"));
+        assertThrows(IllegalArgumentException.class, () -> new RecipeScorersFactory().create(basePath + "archivo.txt"));
     }
 
     @Description("Carpeta vacia")
     @Test
     public void ca3CarpetaVacia() throws Exception {
-        RecipeScorerFactory scorerFactory = new RecipeScorerFactory();
+        RecipeScorersFactory scorerFactory = new RecipeScorersFactory();
         assert (scorerFactory.create(basePath + "carpetaVacia").isEmpty());
     }
 
     @Description("No es criterio de puntuacion")
     @Test
     public void ca4NoEsCriterioDePuntuacion() throws Exception {
-        RecipeScorerFactory scorerFactory = new RecipeScorerFactory();
+        RecipeScorersFactory scorerFactory = new RecipeScorersFactory();
         assert (scorerFactory.create(basePath + "noEsCriterio").isEmpty());
     }
 
     @Description("Puntuador simple")
     @Test
     public void ca5PuntuadorSimple() throws Exception {
-        RecipeScorerFactory scorerFactory = new RecipeScorerFactory();
+        RecipeScorersFactory scorerFactory = new RecipeScorersFactory();
 
         List<RecipeScorer> scorers = scorerFactory.create(basePath + "oneImpl");
 
@@ -55,8 +55,8 @@ public class UserStory2 {
     @Description("Puntuador multiples")
     @Test
     public void ca6PuntuadoresMultiples() throws Exception {
-        RecipeScorerFactory scorerFactory = new RecipeScorerFactory();
-        List<RecipeScorer> scorers = scorerFactory.create(basePath + "twoImpl");
+        RecipeScorersFactory scorersFactory = new RecipeScorersFactory();
+        List<RecipeScorer> scorers = scorersFactory.create(basePath + "twoImpl");
 
         List<String> scorersNames = new ArrayList<>(
                 List.of(scorers.get(0).getName(),
