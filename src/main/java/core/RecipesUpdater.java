@@ -1,7 +1,7 @@
 package core;
 
 import entities.Recipe;
-import interfaces.RecipesFinder;
+import interfaces.RecipesFactory;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -15,10 +15,10 @@ import java.util.concurrent.TimeUnit;
 public class RecipesUpdater {
     private PropertyChangeSupport support;
     private Set<Recipe> recipes;
-    private RecipesFinder recipesFinder;
+    private RecipesFactory recipesFinder;
     private List<String> paths;
 
-    public RecipesUpdater(Long updateTime, RecipesFinder recipesFinder, List<String> paths) {
+    public RecipesUpdater(Long updateTime, RecipesFactory recipesFinder, List<String> paths) {
         this.recipesFinder = recipesFinder;
         this.paths = paths;
         this.support = new PropertyChangeSupport(this);

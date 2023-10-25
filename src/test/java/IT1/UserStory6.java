@@ -4,7 +4,7 @@ import core.ChefExpress;
 import core.RecipesUpdater;
 import entities.Recipe;
 import interfaces.RecipeScorer;
-import interfaces.RecipesFinder;
+import interfaces.RecipesFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -63,7 +63,7 @@ public class UserStory6
 
     private RecipesUpdater initRecipesUpdater(ChefExpress chefExpress, Set<Recipe> recipes)
     {
-        RecipesFinder finder = mock(RecipesFinder.class);
+        RecipesFactory finder = mock(RecipesFactory.class);
         when(finder.findRecipes("")).thenReturn(recipes);
 
         RecipesUpdater recipesUpdater = new RecipesUpdater(10L, finder, List.of(""));
