@@ -16,14 +16,14 @@ import java.util.Set;
 public class ChefExpressFactory
 {
     private LocalRecipesFinder recipesLocalFinder;
-    private RecipeScorerFactory scorerFactory;
+    private RecipeScorersFactory scorerFactory;
 
     private VideoLinkSearcherFactory videoFinderFactory;
 
     private List<RecipeScorer> recipeScorers;
     public ChefExpressFactory()
     {
-        this.scorerFactory = new RecipeScorerFactory();
+        this.scorerFactory = new RecipeScorersFactory();
         this.recipesLocalFinder = new LocalRecipesFinder();
         this.videoFinderFactory = new VideoLinkSearcherFactory();
     }
