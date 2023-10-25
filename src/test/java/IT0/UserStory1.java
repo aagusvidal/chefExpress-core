@@ -1,7 +1,6 @@
 package IT0;
 
 import entities.Recipe;
-import finders.YTVideoLinkSearcher;
 import interfaces.RecipeScorer;
 import jdk.jfr.Description;
 import core.ChefExpress;
@@ -24,7 +23,6 @@ public class UserStory1
     private List<Recipe> unsortedRecipes;
     private List<Recipe> sortedRecipes;
     private RecipeScorer scorerSaludable;
-    private YTVideoLinkSearcher videoLinkSearcher;
 
     @BeforeEach
     public void setUp() {
@@ -38,7 +36,6 @@ public class UserStory1
                 mockRecipe(1, "medium-value-recipe")
         );
         scorerSaludable = mock(RecipeScorer.class);
-        videoLinkSearcher = mock(YTVideoLinkSearcher.class);
         chefExpress = new ChefExpress(new HashSet<>(unsortedRecipes), scorerSaludable);
     }
 

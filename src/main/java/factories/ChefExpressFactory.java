@@ -2,7 +2,7 @@ package factories;
 
 import core.RecipesUpdater;
 import entities.Recipe;
-import finders.YTVideoLinkSearcher;
+import finders.VideoSearcher;
 import interfaces.RecipeScorer;
 import core.ChefExpress;
 import finders.LocalRecipesFinder;
@@ -35,7 +35,7 @@ public class ChefExpressFactory
         Set<Recipe> recipes = recipesLocalFinder.findRecipes(chefExpressProperties.getProperty("RecipesPath"));
 
         Properties videoFinderProperties = loadProperties(chefExpressProperties.getProperty("VideoFinderProperties"));
-        YTVideoLinkSearcher videoFinder= this.videoFinderFactory.create(videoFinderProperties);
+        VideoSearcher videoFinder= this.videoFinderFactory.create(videoFinderProperties);
         ChefExpress chefExpress = new ChefExpress(recipes, recipeScorers.get(0));
 
         String recipesPath = chefExpressProperties.getProperty("RecipesUpdaterPath");

@@ -2,7 +2,7 @@ package IT1;
 
 import core.ChefExpress;
 import entities.Recipe;
-import finders.YTVideoLinkSearcher;
+import finders.VideoSearcher;
 import interfaces.RecipeScorer;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +20,7 @@ public class UserStory4 {
     private ChefExpress chefExpress;
     private List<Recipe> unsortedRecipes;
     private RecipeScorer scorerSaludable;
-    private YTVideoLinkSearcher videoLinkSearcher;
+    private VideoSearcher videoLinkSearcher;
 
     @BeforeEach
     public void setUp() {

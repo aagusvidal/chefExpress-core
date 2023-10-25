@@ -1,18 +1,14 @@
 package IT1;
 
-import finders.YTVideoLinkSearcher;
+import finders.VideoSearcher;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.*;
-
-import static org.mockito.MockitoAnnotations.*;
 
 import services.YTService;
 
-import javax.annotation.meta.When;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +18,7 @@ public class UserStory5 {
 
     private YTService ytService;
 
-    private YTVideoLinkSearcher ytVideoLinkSearcher;
+    private VideoSearcher videoSearcher;
 
     private Map<String, List<String>> recipeVideoIDs;
     private Map<String, String> expectedLinks;
@@ -51,44 +47,44 @@ public class UserStory5 {
     @Description("Receta con múltiples videos")
     public void ca1RecetaConMultiplesVideos() {
         this.ytService = Mockito.mock(YTService.class);
-        this.ytVideoLinkSearcher = new YTVideoLinkSearcher(ytService, YT_PATH);
+        this.videoSearcher = new VideoSearcher(ytService, YT_PATH);
 
         mockYTServiceCall();
 
-        Assertions.assertEquals(this.expectedLinks.get("R1"), this.ytVideoLinkSearcher.searchLink("R1"));
+        Assertions.assertEquals(this.expectedLinks.get("R1"), this.videoSearcher.searchLink("R1"));
     }
 
     @Test
     @Description("Receta con un video")
     public void ca2RecetaConUnVideo() {
         this.ytService = Mockito.mock(YTService.class);
-        this.ytVideoLinkSearcher = new YTVideoLinkSearcher(ytService, YT_PATH);
+        this.videoSearcher = new VideoSearcher(ytService, YT_PATH);
 
         mockYTServiceCall();
 
-        Assertions.assertEquals(this.expectedLinks.get("R2"), this.ytVideoLinkSearcher.searchLink("R2"));
+        Assertions.assertEquals(this.expectedLinks.get("R2"), this.videoSearcher.searchLink("R2"));
     }
 
     @Test
     @Description("Receta sin video")
     public void ca3RecetaSinVideo() {
         this.ytService = Mockito.mock(YTService.class);
-        this.ytVideoLinkSearcher = new YTVideoLinkSearcher(ytService, YT_PATH);
+        this.videoSearcher = new VideoSearcher(ytService, YT_PATH);
 
         mockYTServiceCall();
 
-        Assertions.assertEquals(this.expectedLinks.get("R3"), this.ytVideoLinkSearcher.searchLink("R3"));
+        Assertions.assertEquals(this.expectedLinks.get("R3"), this.videoSearcher.searchLink("R3"));
     }
 
     @Test
     @Description("Busqueda sin nombre de receta")
     public void ca4BusquedaSinNombreDeReceta() {
         this.ytService = Mockito.mock(YTService.class);
-        this.ytVideoLinkSearcher = new YTVideoLinkSearcher(ytService, YT_PATH);
+        this.videoSearcher = new VideoSearcher(ytService, YT_PATH);
 
         mockYTServiceCall();
 
-        Assertions.assertEquals("", this.ytVideoLinkSearcher.searchLink(""));
+        Assertions.assertEquals("", this.videoSearcher.searchLink(""));
     }
 
     private void mockYTServiceCall() {

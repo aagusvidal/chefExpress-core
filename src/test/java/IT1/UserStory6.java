@@ -3,21 +3,16 @@ package IT1;
 import core.ChefExpress;
 import core.RecipesUpdater;
 import entities.Recipe;
-import finders.YTVideoLinkSearcher;
 import interfaces.RecipeScorer;
 import interfaces.RecipesFinder;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.*;
 
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.*;
 
 
 public class UserStory6
