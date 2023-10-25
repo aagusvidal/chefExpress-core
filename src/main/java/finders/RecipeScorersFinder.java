@@ -1,7 +1,5 @@
 package finders;
 
-import interfaces.RecipeScorer;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,12 +10,12 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 
-public class RecipeScorerFinder
+public class RecipeScorersFinder
 {
     private static final String validFileExtension = ".jar";
 
 
-    public RecipeScorerFinder()
+    public RecipeScorersFinder()
     {}
 
     public  Set<Class<?>>  find(String directory) throws FileNotFoundException

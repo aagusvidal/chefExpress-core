@@ -1,6 +1,6 @@
 package factories;
 
-import finders.RecipeScorerFinder;
+import finders.RecipeScorersFinder;
 import interfaces.RecipeScorer;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ public class RecipeScorersFactory
 {
     public List<RecipeScorer> create(String directory) throws FileNotFoundException
     {
-        Set<Class<?>> classes = new RecipeScorerFinder().find(directory);
+        Set<Class<?>> classes = new RecipeScorersFinder().find(directory);
         List<RecipeScorer> scorers = new ArrayList<>();
 
         for(Class<?> aClass : classes)
