@@ -28,6 +28,22 @@ public class UserStory3
     @InjectMocks
     private RecommendationLogger recommendationLogger;
 
+    private List<Recommendation> uniqueRecommendations;
+    private List<Recipe> uniqueRecipeRecommendations;
+    private List<Recommendation> multipleRecommendations;
+    private List<Recipe> multipleRecipeRecommendations;
+
+    UserStory3()
+    {
+        List<Integer> uniqueRecipeIds = Arrays.asList(1, 2);
+        this.uniqueRecommendations = this.createRecommendations(uniqueRecipeIds);
+        this.uniqueRecipeRecommendations = mockRecipes(uniqueRecipeIds);
+
+        this.multipleRecommendations = this.createRecommendations(Arrays.asList(1, 2, 3, 1));
+        this.multipleRecipeRecommendations =  mockRecipes(Arrays.asList(1));
+    }
+
+
     @BeforeEach
     public void setUp() {
         openMocks(this);
@@ -36,39 +52,38 @@ public class UserStory3
     @Test
     public void ca1SinRecetasMasRecomendadas()
     {
-        when(this.recommendationProvider.getHistoricRecommendations()).thenReturn(Collections.emptyList());
+        this.initRecommendationProvider(Collections.emptyList());
+
         assertTrue(this.recommendationLogger.getTopRecipes().isEmpty());
     }
 
     @Test
     public void ca2MultiplesRecetasMasRecomendadas()
     {
-        List<Integer> recipeIds = Arrays.asList(1, 2);
-        List<Recommendation> uniqueRecommendations = mockRecommendations(mockRecipes(recipeIds));
-
-        List<Recipe> expectedRecipes = mockRecipes(recipeIds);
-
-        when(this.recommendationProvider.getHistoricRecommendations()).thenReturn(uniqueRecommendations);
+        this.initRecommendationProvider(uniqueRecommendations);
 
         List<Recipe> actualRecipes = this.recommendationLogger.getTopRecipes();
 
-        assertEquals(expectedRecipes, actualRecipes);
+        assertEquals(this.uniqueRecipeRecommendations, actualRecipes);
     }
 
     @Test
     public void ca3UnicaRecetaMasRecomendada()
     {
-        List<Integer> recipeIds = Arrays.asList(1, 2, 3, 1);
-        List<Recommendation> multipleRecommendations = mockRecommendations(mockRecipes(recipeIds));
+        this.initRecommendationProvider(multipleRecommendations);
 
-        List<Integer> expectedRecipeIds = Arrays.asList(1);
-        List<Recipe> expectedRecipes = mockRecipes(expectedRecipeIds);
+        assertEquals(multipleRecipeRecommendations, this.recommendationLogger.getTopRecipes());
+    }
 
-        when(this.recommendationProvider.getHistoricRecommendations()).thenReturn(multipleRecommendations);
 
-        List<Recipe> actualRecipes = this.recommendationLogger.getTopRecipes();
+    private void initRecommendationProvider(List<Recommendation> recommendations)
+    {
+        when(this.recommendationProvider.getHistoricRecommendations()).thenReturn(recommendations);
+    }
 
-        assertEquals(expectedRecipes, actualRecipes);
+    private List<Recommendation> createRecommendations(List<Integer> recipeIds)
+    {
+        return multipleRecommendations = mockRecommendations(mockRecipes(recipeIds));
     }
 
     private List<Recommendation> mockRecommendations(List<Recipe> recipes)

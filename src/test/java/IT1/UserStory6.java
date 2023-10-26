@@ -8,7 +8,10 @@ import interfaces.RecipesFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -28,6 +31,7 @@ public class UserStory6
     {
         this.uniqueRecipes = Set.of(mockRecipe(1, "R1"));
         this.noRecipes = new HashSet<>();
+
         RecipeScorer scorerSaludable = mock(RecipeScorer.class);
         baseRecipes = Set.of(mockRecipe(2, "R2"));
         chefExpress = new ChefExpress(baseRecipes,scorerSaludable );
@@ -38,6 +42,7 @@ public class UserStory6
     {
         recipesUpdater = initRecipesUpdater(chefExpress, uniqueRecipes);
         recipesUpdater.updateRecipes();
+
         assertEquals(chefExpress.getRecipes(), uniqueRecipes);
     }
 
@@ -72,7 +77,8 @@ public class UserStory6
         return recipesUpdater;
     }
 
-    private Recipe mockRecipe(int id, String name) {
+    private Recipe mockRecipe(int id, String name)
+    {
         Map<String, Float> ingredients = Map.of(
                 "ingredient-1", 10.0f,
                 "ingredient-2", 20.0f,

@@ -56,12 +56,21 @@ public class ChefExpress implements PropertyChangeListener
         this.recipeRecommendations = recommendations;
     }
 
-    public void setScorer(RecipeScorer scorer) {
-        this.scorer = scorer;
+    public void setScorer(RecipeScorer scorer)
+    {
+        if (scorer == null)
+            throw new IllegalArgumentException();
+        else
+            this.scorer = scorer;
     }
 
     public RecipeScorer getScorer() {
         return scorer;
+    }
+
+    public String getScorerName()
+    {
+        return scorer.getName();
     }
 
     @Override
