@@ -23,7 +23,7 @@ public class ChefExpressInit
     public ChefExpress initChefExpress(Properties chefExpressProperties) throws Exception
     {
         RecipesFactory recipesLocalFinder = new LocalRecipesFactory();
-        Set<Recipe> recipes = recipesLocalFinder.findRecipes(chefExpressProperties.getProperty("RecipesPath"));
+        Set<Recipe> recipes = recipesLocalFinder.findRecipes("/"+ chefExpressProperties.getProperty("RecipesPath"));
 
         String chefExpressScorersPath = chefExpressProperties.getProperty("ScorersPath");
         ChefExpress chefExpress = chefExpressFactory.createChefExpress(chefExpressScorersPath, recipes);
