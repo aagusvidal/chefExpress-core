@@ -1,7 +1,7 @@
 package factories;
 
 import core.ChefExpress;
-import core.VideoRecipeRecommendator;
+import core.VideoRecipeRecommender;
 import finders.VideoSearcher;
 import interfaces.RecipeScorer;
 
@@ -20,7 +20,7 @@ public class VideoRecipeRecommendatorBuilder
         this.chefExpressInit =  new ChefExpressInit();
     }
 
-    public VideoRecipeRecommendator build(String propertyPath) throws Exception
+    public VideoRecipeRecommender build(String propertyPath) throws Exception
     {
         Properties chefExpressProperties = loadProperties(propertyPath);;
         this.chefExpress = this.chefExpressInit.initChefExpress(chefExpressProperties);
@@ -28,7 +28,7 @@ public class VideoRecipeRecommendatorBuilder
         Properties videoFinderProperties = loadProperties(chefExpressProperties.getProperty("VideoFinderProperties"));
         VideoSearcher videoSearcher = new VideoSearcherFactory().create(videoFinderProperties);
 
-        return new VideoRecipeRecommendator(videoSearcher, chefExpress);
+        return new VideoRecipeRecommender(videoSearcher, chefExpress);
     }
 
     public ChefExpress getChefExpress(){ return chefExpress;}

@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 import java.util.List;
 
-public class VideoRecipeRecommendator implements PropertyChangeListener
+public class VideoRecipeRecommender implements PropertyChangeListener
 {
     private ChefExpress chefExpress;
     private VideoSearcher videoSearcher;
@@ -20,7 +20,7 @@ public class VideoRecipeRecommendator implements PropertyChangeListener
     private PropertyChangeSupport support;
 
 
-    public VideoRecipeRecommendator(VideoSearcher videoSearcher, ChefExpress chefExpress)
+    public VideoRecipeRecommender(VideoSearcher videoSearcher, ChefExpress chefExpress)
     {
         this.chefExpress = chefExpress;
         this.chefExpress.attach(this);
