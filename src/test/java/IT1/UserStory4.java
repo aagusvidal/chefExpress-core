@@ -27,10 +27,11 @@ public class UserStory4
     {
         scorerSaludable = mock(RecipeScorer.class);
         when(scorerSaludable.getName()).thenReturn("Saludables");
-
         scorerCeliac = mock(RecipeScorer.class);
         when(scorerCeliac.getName()).thenReturn("Sin TACC");
         scorersMockEmpty = new HashMap<String, RecipeScorer>();
+        scorersMockEmpty.put(scorerSaludable.getName(), scorerSaludable);
+        scorersMockEmpty.put(scorerCeliac.getName(), scorerCeliac);
         chefExpress = new ChefExpress(new HashSet<>(Collections.emptyList()), scorerSaludable, scorersMockEmpty);
     }
 
