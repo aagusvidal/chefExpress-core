@@ -1,9 +1,8 @@
 package factories;
 
-import core.ChefExpress;
 import core.ChefExpressStatistics;
 import core.RecommendationLogger;
-import core.VideoRecipeRecommendator;
+import core.VideoRecipeRecommender;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,7 +10,7 @@ import java.util.Properties;
 
 public class ChefExpressStatisticsFactory
 {
-    public ChefExpressStatistics create(VideoRecipeRecommendator recommender, String propertyPath)
+    public ChefExpressStatistics create(VideoRecipeRecommender recommender, String propertyPath)
     {
         RecommendationLogger logger = new RecommendationLoggerFactory().createRecommendationLogger(recommender);
         return new ChefExpressStatistics(logger);

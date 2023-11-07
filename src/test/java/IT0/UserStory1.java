@@ -7,10 +7,7 @@ import core.ChefExpress;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -24,6 +21,8 @@ public class UserStory1
     private List<Recipe> sortedRecipes;
     private RecipeScorer scorerSaludable;
 
+    private Map<String, RecipeScorer> scorersMockEmpty;
+
     @BeforeEach
     public void setUp() {
         unsortedRecipes = List.of(
@@ -36,7 +35,8 @@ public class UserStory1
                 mockRecipe(1, "medium-value-recipe")
         );
         scorerSaludable = mock(RecipeScorer.class);
-        chefExpress = new ChefExpress(new HashSet<>(unsortedRecipes), scorerSaludable);
+        scorersMockEmpty = new HashMap<String, RecipeScorer>();
+        chefExpress = new ChefExpress(new HashSet<>(unsortedRecipes), scorerSaludable, scorersMockEmpty);
     }
 
     @Test
@@ -94,7 +94,7 @@ public class UserStory1
         @Description("Recomendación sin recetas")
         public void ca4RecomendacionSinRecetas()
         {
-            chefExpress = new ChefExpress(new HashSet<>(), scorerSaludable);
+            chefExpress = new ChefExpress(new HashSet<>(), scorerSaludable, scorersMockEmpty);
 
             List<Recipe> recommendations = chefExpress.recommend();
 
@@ -106,7 +106,7 @@ public class UserStory1
         public void ca5RecetaSinPuntaje() {
             final Recipe recipe = mockRecipe(0, "not-scored-recipe");
             final Set<Recipe> unScoredRecipes = Set.of(recipe);
-            chefExpress = new ChefExpress(unScoredRecipes, scorerSaludable);
+            chefExpress = new ChefExpress(unScoredRecipes, scorerSaludable, scorersMockEmpty);
 
             when(scorerSaludable.score(recipe)).thenReturn(0);
 

@@ -8,10 +8,7 @@ import interfaces.RecipesFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -34,7 +31,8 @@ public class UserStory6
 
         RecipeScorer scorerSaludable = mock(RecipeScorer.class);
         baseRecipes = Set.of(mockRecipe(2, "R2"));
-        chefExpress = new ChefExpress(baseRecipes,scorerSaludable );
+        Map<String, RecipeScorer> scorers = new HashMap<String, RecipeScorer>();
+        chefExpress = new ChefExpress(baseRecipes,scorerSaludable, scorers);
     }
 
     @Test

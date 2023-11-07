@@ -4,7 +4,6 @@ import core.ChefExpress;
 import core.RecipesUpdater;
 import entities.Recipe;
 import finders.LocalRecipesFactory;
-import interfaces.RecipeScorer;
 import interfaces.RecipesFactory;
 
 import java.util.List;
@@ -34,9 +33,5 @@ public class ChefExpressInit
         recipesUpdater.attach(chefExpress);
 
         return chefExpress;
-    }
-
-    public List<RecipeScorer> getRecipeScorers() {
-        return this.chefExpressFactory.getRecipeScorers();
     }
 }

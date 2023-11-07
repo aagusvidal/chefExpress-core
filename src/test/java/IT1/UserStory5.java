@@ -17,7 +17,7 @@ import java.util.Map;
 public class UserStory5
 {
 
-    private YTService ytService;
+    private YTService YTService;
 
     private VideoSearcher videoSearcher;
 
@@ -42,7 +42,7 @@ public class UserStory5
                 "R3", ""
         );
 
-        this.ytService = Mockito.mock(YTService.class);
+        this.YTService = Mockito.mock(YTService.class);
         mockYTServiceCall();
     }
 
@@ -50,7 +50,7 @@ public class UserStory5
     @Description("Receta con múltiples videos")
     public void ca1RecetaConMultiplesVideos()
     {
-        this.videoSearcher = new VideoSearcher(ytService, YT_PATH);
+        this.videoSearcher = new VideoSearcher(YTService, YT_PATH);
 
         Assertions.assertEquals(this.expectedLinks.get("R1"), this.videoSearcher.searchLink("R1"));
     }
@@ -59,7 +59,7 @@ public class UserStory5
     @Description("Receta con un video")
     public void ca2RecetaConUnVideo()
     {
-        this.videoSearcher = new VideoSearcher(ytService, YT_PATH);
+        this.videoSearcher = new VideoSearcher(YTService, YT_PATH);
 
         Assertions.assertEquals(this.expectedLinks.get("R2"), this.videoSearcher.searchLink("R2"));
     }
@@ -68,7 +68,7 @@ public class UserStory5
     @Description("Receta sin video")
     public void ca3RecetaSinVideo()
     {
-        this.videoSearcher = new VideoSearcher(ytService, YT_PATH);
+        this.videoSearcher = new VideoSearcher(YTService, YT_PATH);
 
         Assertions.assertEquals(this.expectedLinks.get("R3"), this.videoSearcher.searchLink("R3"));
     }
@@ -77,7 +77,7 @@ public class UserStory5
     @Description("Busqueda sin nombre de receta")
     public void ca4BusquedaSinNombreDeReceta()
     {
-        this.videoSearcher = new VideoSearcher(ytService, YT_PATH);
+        this.videoSearcher = new VideoSearcher(YTService, YT_PATH);
 
         Assertions.assertEquals("", this.videoSearcher.searchLink(""));
     }
@@ -85,7 +85,7 @@ public class UserStory5
     private void mockYTServiceCall()
     {
         recipeVideoIDs.keySet().forEach(r ->
-                Mockito.when(this.ytService.getResults(BASE_QUERY + r))
+                Mockito.when(this.YTService.getResults(BASE_QUERY + r))
                         .thenReturn(this.recipeVideoIDs.get(r)));
     }
 }
