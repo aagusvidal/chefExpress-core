@@ -3,11 +3,9 @@ package factories;
 import core.ChefExpress;
 import core.VideoRecipeRecommender;
 import finders.VideoSearcher;
-import interfaces.RecipeScorer;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.List;
 import java.util.Properties;
 
 public class VideoRecipeRecommendatorBuilder
@@ -32,8 +30,6 @@ public class VideoRecipeRecommendatorBuilder
     }
 
     public ChefExpress getChefExpress(){ return chefExpress;}
-
-    public List<RecipeScorer> getRecipeScorers() { return this.chefExpressInit.getRecipeScorers(); }
 
     private Properties loadProperties(String configPath)
     {

@@ -8,6 +8,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,17 +16,20 @@ public class ChefExpress implements PropertyChangeListener
 {
     private PropertyChangeSupport support;
     protected Set<Recipe> recipes;
-    protected RecipeScorer scorer;
+
+    protected Map<String, RecipeScorer>possiblesScorers;
+    protected  RecipeScorer scorer;
     private List<Recipe> recipeRecommendations;
     private final int recipesLimit;
 
 
-    public ChefExpress(Set<Recipe> recipes, RecipeScorer scorer)
+    public ChefExpress(Set<Recipe> recipes, RecipeScorer scorer, Map<String, RecipeScorer> possiblesScorers)
     {
         this.recipes = recipes;
         this.scorer = scorer;
         this.recipesLimit = 2;
         this.recipeRecommendations = new ArrayList<>();
+        this.possiblesScorers = possiblesScorers;
         this.support = new PropertyChangeSupport(this);
     }
 
@@ -56,12 +60,18 @@ public class ChefExpress implements PropertyChangeListener
         this.recipeRecommendations = recommendations;
     }
 
-    public void setScorer(RecipeScorer scorer)
+    public void setScorer(String scorerName)
     {
-        if (scorer == null)
+        if (scorerName == null)
             throw new IllegalArgumentException();
         else
-            this.scorer = scorer;
+           this.setImplementationScorer(scorerName);
+    }
+
+    private void setImplementationScorer(String scorerName) {
+        if(possiblesScorers.containsKey(scorerName)){
+            this.scorer = possiblesScorers.get(scorerName);
+        }
     }
 
     public RecipeScorer getScorer() {
