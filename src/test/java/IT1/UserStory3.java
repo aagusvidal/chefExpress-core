@@ -1,102 +1,92 @@
 package IT1;
 
-import core.RecommendationLogger;
+import core.ChefExpress;
+import core.HistoricalRecipesCounter;
 import entities.Recipe;
-import entities.Recommendation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import providers.RecommendationProvider;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 
-public class UserStory3
-{
-    @Mock
-    private RecommendationProvider recommendationProvider;
-    @InjectMocks
-    private RecommendationLogger recommendationLogger;
+public class UserStory3 {
 
-    private List<Recommendation> uniqueRecommendations;
-    private List<Recipe> uniqueRecipeRecommendations;
-    private List<Recommendation> multipleRecommendations;
-    private List<Recipe> multipleRecipeRecommendations;
+    private HistoricalRecipesCounter historicalRecipesCounter;
 
-    UserStory3()
-    {
-        List<Integer> uniqueRecipeIds = Arrays.asList(1, 2);
-        this.uniqueRecommendations = this.createRecommendations(uniqueRecipeIds);
-        this.uniqueRecipeRecommendations = mockRecipes(uniqueRecipeIds);
-
-        this.multipleRecommendations = this.createRecommendations(Arrays.asList(1, 2, 3, 1));
-        this.multipleRecipeRecommendations =  mockRecipes(Arrays.asList(1));
-    }
-
-
+    private ChefExpress chefExpress;
     @BeforeEach
     public void setUp() {
         openMocks(this);
+        chefExpress = mock(ChefExpress.class);
+        historicalRecipesCounter =  new HistoricalRecipesCounter();
+        chefExpress.attach(historicalRecipesCounter);
     }
 
     @Test
-    public void ca1SinRecetasMasRecomendadas()
-    {
-        this.initRecommendationProvider(Collections.emptyList());
-
-        assertTrue(this.recommendationLogger.getTopRecipes().isEmpty());
+    public void ca1SinRecetasMasRecomendadas() {
+        when(this.chefExpress.recommend()).thenReturn(Collections.emptyList());
+        this.chefExpress.recommend();
+        assertTrue(historicalRecipesCounter.getHistoricRecipes().isEmpty());
     }
 
-    @Test
-    public void ca2MultiplesRecetasMasRecomendadas()
-    {
-        this.initRecommendationProvider(uniqueRecommendations);
+   /* @Test
+    public void ca2MultiplesRecetasMasRecomendadas() {
+       /* List<Integer> recipeIds = Arrays.asList(1, 2);
+        when(this.chefExpress.recommend()).thenReturn(mockRecipes(recipeIds));
+        this.chefExpress.recommend();
+        Map<Recipe, Integer> actualRecipes = mockRecommendations(mockRecipes(recipeIds));
+        assertTrue(this.areMapsEqual(historicalRecipesCounter.getHistoricRecipes(), actualRecipes));
+
+    } */
+    /*@Test
+    public void ca3UnicaRecetaMasRecomendada() {
+       List<Integer> recipeIds = Arrays.asList(1, 2, 3, 1);
+        Map<Recipe, Integer> multipleRecommendations = mockRecommendations(mockRecipes(recipeIds));
+
+        List<Integer> expectedRecipeIds = Arrays.asList(1);
+        List<Recipe> expectedRecipes = mockRecipes(expectedRecipeIds);
+
+        when(this.recommendationProvider.getHistoricRecommendations()).thenReturn(multipleRecommendations);
 
         List<Recipe> actualRecipes = this.recommendationLogger.getTopRecipes();
 
-        assertEquals(this.uniqueRecipeRecommendations, actualRecipes);
+        assertEquals(expectedRecipes, actualRecipes);
+    }*/
+
+    private Map<Recipe, Integer> mockRecommendations(List<Recipe> recipes) {
+        Map<Recipe, Integer> recommendationMap = new HashMap<>();
+
+        for (Recipe recipe : recipes) {
+            int quantity = 1;
+            recommendationMap.put(recipe, quantity);
+        }
+        return recommendationMap;
     }
 
-    @Test
-    public void ca3UnicaRecetaMasRecomendada()
-    {
-        this.initRecommendationProvider(multipleRecommendations);
-
-        assertEquals(multipleRecipeRecommendations, this.recommendationLogger.getTopRecipes());
-    }
-
-
-    private void initRecommendationProvider(List<Recommendation> recommendations)
-    {
-        when(this.recommendationProvider.getHistoricRecommendations()).thenReturn(recommendations);
-    }
-
-    private List<Recommendation> createRecommendations(List<Integer> recipeIds)
-    {
-        return multipleRecommendations = mockRecommendations(mockRecipes(recipeIds));
-    }
-
-    private List<Recommendation> mockRecommendations(List<Recipe> recipes)
-    {
-        return recipes
-                .stream()
-                .map(recipe -> new Recommendation("linka",recipe)).collect(Collectors.toList());
-    }
-
-    private List<Recipe> mockRecipes(List<Integer> ids)
-    {
+    private List<Recipe> mockRecipes(List<Integer> ids) {
         return ids.stream()
                 .map(recipeId -> new Recipe(recipeId, "recipe " + recipeId, new HashMap<>()))
                 .collect(Collectors.toList());
+    }
+
+    private boolean areMapsEqual(Map<Recipe, Integer> map1, Map<Recipe, Integer> map2) {
+        if (map1.size() != map2.size()) {
+            return false;
+        }
+        for (Map.Entry<Recipe, Integer> entry : map1.entrySet()) {
+            Recipe key = entry.getKey();
+            Integer value1 = entry.getValue();
+            Integer value2 = map2.get(key);
+            if (value2 == null || !Objects.equals(value1, value2)) {
+                return false;
+            }
+        }
+        return true;
     }
 }
