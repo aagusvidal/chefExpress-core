@@ -1,7 +1,8 @@
 package factories;
 
+import core.ChefExpress;
 import core.ChefExpressStatistics;
-import core.VideoRecipeRecommender;
+import core.HistoricalRecipesCounter;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -9,11 +10,10 @@ import java.util.Properties;
 
 public class ChefExpressStatisticsFactory
 {
-    public ChefExpressStatistics create(VideoRecipeRecommender recommender, String propertyPath)
+    public ChefExpressStatistics create(ChefExpress recommender, String propertyPath)
     {
-        //Descomentar después
-       // RecommendationLogger logger = new RecommendationLoggerFactory().createRecommendationLogger(recommender);
-        return new ChefExpressStatistics(null);
+        HistoricalRecipesCounter historicalRecipesCounter = new HistoricalRecipesCounterFactory().createHistoricalRecipesCounter(recommender);
+        return new ChefExpressStatistics(historicalRecipesCounter);
     }
 
     private Properties loadProperties(String configPath)

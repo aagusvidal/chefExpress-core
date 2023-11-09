@@ -2,19 +2,19 @@ package core;
 
 import entities.Recipe;
 
-import java.util.List;
+import java.util.Map;
 
 public class ChefExpressStatistics
 {
-    private RecommendationLogger logger;
+    private HistoricalRecipesCounter historicalRecipesCounter;
 
-    public ChefExpressStatistics(RecommendationLogger logger)
+    public ChefExpressStatistics(HistoricalRecipesCounter historicalRecipesCounter)
     {
-        this.logger = logger;
+        this.historicalRecipesCounter = historicalRecipesCounter;
     }
 
-    public List<Recipe> getTopRecipes()
+    public Map<Recipe, Integer> getTopRecipes()
     {
-        return logger.getTopRecipes();
+        return historicalRecipesCounter.getHistoricRecipes();
     }
 }
