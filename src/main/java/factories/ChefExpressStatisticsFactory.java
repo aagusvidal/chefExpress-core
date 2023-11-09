@@ -11,6 +11,7 @@ public class ChefExpressStatisticsFactory
 {
     public ChefExpressStatistics create(VideoRecipeRecommender recommender, String propertyPath)
     {
+        //Descomentar después
        // RecommendationLogger logger = new RecommendationLoggerFactory().createRecommendationLogger(recommender);
         return new ChefExpressStatistics(null);
     }
