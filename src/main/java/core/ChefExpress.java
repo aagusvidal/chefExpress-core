@@ -56,6 +56,7 @@ public class ChefExpress implements PropertyChangeListener
 
     private void setRecommendations(List<Recipe> recommendations)
     {
+        System.out.println(recommendations);
         support.firePropertyChange("Recipe recommendations", this.recipeRecommendations, recommendations);
         this.recipeRecommendations = recommendations;
     }
@@ -88,6 +89,7 @@ public class ChefExpress implements PropertyChangeListener
     {
         Set<Recipe> recipes = (Set<Recipe>) evt.getNewValue();
         this.setRecipes(recipes);
+        System.out.println(recipes);
         this.setRecommendations(this.recommend());
     }
 

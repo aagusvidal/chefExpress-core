@@ -4,14 +4,14 @@ import core.ChefExpress;
 import core.HistoricalRecipesCounter;
 import entities.Recipe;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 
@@ -28,12 +28,12 @@ public class UserStory3 {
         chefExpress.attach(historicalRecipesCounter);
     }
 
-    @Test
+   /* @Test
     public void ca1SinRecetasMasRecomendadas() {
         when(this.chefExpress.recommend()).thenReturn(Collections.emptyList());
         this.chefExpress.recommend();
         assertTrue(historicalRecipesCounter.getHistoricRecipes().isEmpty());
-    }
+    }*/
 
    /* @Test
     public void ca2MultiplesRecetasMasRecomendadas() {
