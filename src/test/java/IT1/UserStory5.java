@@ -1,6 +1,8 @@
 package IT1;
 
-import finders.VideoSearcher;
+import core.ChefExpress;
+import finders.RecipesVideoUpdater;
+import interfaces.RecipeScorer;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,9 +11,9 @@ import org.mockito.*;
 
 import services.YTService;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static org.mockito.Mockito.mock;
 
 
 public class UserStory5
@@ -19,7 +21,11 @@ public class UserStory5
 
     private YTService YTService;
 
-    private VideoSearcher videoSearcher;
+    private ChefExpress chefExpress;
+
+    private RecipeScorer scorerMock;
+
+    private RecipesVideoUpdater videoSearcher;
 
     private Map<String, List<String>> recipeVideoIDs;
     private Map<String, String> expectedLinks;
@@ -42,6 +48,8 @@ public class UserStory5
                 "R3", ""
         );
 
+        scorerMock = mock(RecipeScorer.class);
+        chefExpress = new ChefExpress(new HashSet<>(), scorerMock, new HashMap<>());
         this.YTService = Mockito.mock(YTService.class);
         mockYTServiceCall();
     }
@@ -50,7 +58,7 @@ public class UserStory5
     @Description("Receta con múltiples videos")
     public void ca1RecetaConMultiplesVideos()
     {
-        this.videoSearcher = new VideoSearcher(YTService, YT_PATH);
+        this.videoSearcher = new RecipesVideoUpdater(YTService, YT_PATH, chefExpress);
 
         Assertions.assertEquals(this.expectedLinks.get("R1"), this.videoSearcher.searchLink("R1"));
     }
@@ -59,7 +67,7 @@ public class UserStory5
     @Description("Receta con un video")
     public void ca2RecetaConUnVideo()
     {
-        this.videoSearcher = new VideoSearcher(YTService, YT_PATH);
+        this.videoSearcher = new RecipesVideoUpdater(YTService, YT_PATH, chefExpress);
 
         Assertions.assertEquals(this.expectedLinks.get("R2"), this.videoSearcher.searchLink("R2"));
     }
@@ -68,7 +76,7 @@ public class UserStory5
     @Description("Receta sin video")
     public void ca3RecetaSinVideo()
     {
-        this.videoSearcher = new VideoSearcher(YTService, YT_PATH);
+        this.videoSearcher = new RecipesVideoUpdater(YTService, YT_PATH, chefExpress);
 
         Assertions.assertEquals(this.expectedLinks.get("R3"), this.videoSearcher.searchLink("R3"));
     }
@@ -77,7 +85,7 @@ public class UserStory5
     @Description("Busqueda sin nombre de receta")
     public void ca4BusquedaSinNombreDeReceta()
     {
-        this.videoSearcher = new VideoSearcher(YTService, YT_PATH);
+        this.videoSearcher = new RecipesVideoUpdater(YTService, YT_PATH, chefExpress);
 
         Assertions.assertEquals("", this.videoSearcher.searchLink(""));
     }

@@ -1,13 +1,14 @@
 package finders;
 
+import core.ChefExpress;
 import services.YTService;
 
-public class VideoSearcher
+public class RecipesVideoUpdater
 {
     private YTService ytService;
     private String YT_BASE_PATH;
 
-    public VideoSearcher(YTService ytService, String ytPath )
+    public RecipesVideoUpdater(YTService ytService, String ytPath, ChefExpress chefExpress )
     {
         this.ytService = ytService;
         this.YT_BASE_PATH = ytPath;
