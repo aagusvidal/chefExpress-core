@@ -20,14 +20,11 @@ public class ChefExpress implements PropertyChangeListener
     protected Map<String, RecipeScorer>possiblesScorers;
     protected  RecipeScorer scorer;
     private List<Recipe> recipeRecommendations;
-    private final int recipesLimit;
-
 
     public ChefExpress(Set<Recipe> recipes, RecipeScorer scorer, Map<String, RecipeScorer> possiblesScorers)
     {
         this.recipes = recipes;
         this.scorer = scorer;
-        this.recipesLimit = 2;
         this.recipeRecommendations = new ArrayList<>();
         this.possiblesScorers = possiblesScorers;
         this.support = new PropertyChangeSupport(this);
@@ -39,7 +36,6 @@ public class ChefExpress implements PropertyChangeListener
                 .stream()
                 .filter(recipe -> scorer.score(recipe) != 0)
                 .sorted((r1, r2) -> scorer.score(r2) - scorer.score(r1))
-                .limit(this.recipesLimit)
                 .collect(Collectors.toList());
 
         setRecommendations(recipeRecommendations);
@@ -56,7 +52,6 @@ public class ChefExpress implements PropertyChangeListener
 
     private void setRecommendations(List<Recipe> recommendations)
     {
-        System.out.println(recommendations);
         support.firePropertyChange("Recipe recommendations", this.recipeRecommendations, recommendations);
         this.recipeRecommendations = recommendations;
     }
@@ -89,7 +84,6 @@ public class ChefExpress implements PropertyChangeListener
     {
         Set<Recipe> recipes = (Set<Recipe>) evt.getNewValue();
         this.setRecipes(recipes);
-        System.out.println(recipes);
         this.setRecommendations(this.recommend());
     }
 
