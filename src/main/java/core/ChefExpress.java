@@ -1,6 +1,7 @@
 package core;
 
 import entities.Recipe;
+import finders.RecipesProvider;
 import interfaces.RecipeScorer;
 
 import java.beans.PropertyChangeEvent;
@@ -15,15 +16,16 @@ import java.util.stream.Collectors;
 public class ChefExpress implements PropertyChangeListener
 {
     private PropertyChangeSupport support;
-    protected Set<Recipe> recipes;
+
+    protected RecipesProvider recipesProvider;
 
     protected Map<String, RecipeScorer>possiblesScorers;
     protected  RecipeScorer scorer;
     private List<Recipe> recipeRecommendations;
 
-    public ChefExpress(Set<Recipe> recipes, RecipeScorer scorer, Map<String, RecipeScorer> possiblesScorers)
+    public ChefExpress(RecipesProvider recipesProvider, RecipeScorer scorer, Map<String, RecipeScorer> possiblesScorers)
     {
-        this.recipes = recipes;
+        this.recipesProvider = recipesProvider;
         this.scorer = scorer;
         this.recipeRecommendations = new ArrayList<>();
         this.possiblesScorers = possiblesScorers;
@@ -32,7 +34,7 @@ public class ChefExpress implements PropertyChangeListener
 
     public List<Recipe> recommend()
     {
-        List<Recipe> recipeRecommendations = this.recipes
+        List<Recipe> recipeRecommendations = this.recipesProvider.getRecipes()
                 .stream()
                 .filter(recipe -> scorer.score(recipe) != 0)
                 .sorted((r1, r2) -> scorer.score(r2) - scorer.score(r1))
@@ -88,10 +90,10 @@ public class ChefExpress implements PropertyChangeListener
     }
 
     public void setRecipes(Set<Recipe> recipes) {
-        this.recipes = recipes;
+        this.recipesProvider.setRecipes(recipes);
     }
 
-    public Set<Recipe> getRecipes(){return this.recipes;}
+    public Set<Recipe> getRecipes(){return this.recipesProvider.getRecipes();}
 
     public String[] scorersNamesArray(){
         List<String> scorersList = new ArrayList<>(this.possiblesScorers.keySet());

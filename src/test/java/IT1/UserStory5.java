@@ -1,8 +1,13 @@
 package IT1;
 
 import core.ChefExpress;
+import core.RecipesUpdater;
+import entities.Recipe;
+import finders.LocalRecipesFactory;
+import finders.RecipesProvider;
 import finders.RecipesVideoUpdater;
 import interfaces.RecipeScorer;
+import interfaces.RecipesFactory;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +35,8 @@ public class UserStory5
     private Map<String, List<String>> recipeVideoIDs;
     private Map<String, String> expectedLinks;
 
+    private RecipesProvider recipesProvider;
+
     private final String YT_PATH = "https://www.youtube.com/watch?v=";
     private final String BASE_QUERY = "receta de ";
 
@@ -49,7 +56,8 @@ public class UserStory5
         );
 
         scorerMock = mock(RecipeScorer.class);
-        chefExpress = new ChefExpress(new HashSet<>(), scorerMock, new HashMap<>());
+        recipesProvider = this.createRecipeProvider(new ArrayList<Recipe>());
+        chefExpress = new ChefExpress(recipesProvider, scorerMock, new HashMap<>());
         this.YTService = Mockito.mock(YTService.class);
         mockYTServiceCall();
     }
@@ -95,5 +103,14 @@ public class UserStory5
         recipeVideoIDs.keySet().forEach(r ->
                 Mockito.when(this.YTService.getResults(BASE_QUERY + r))
                         .thenReturn(this.recipeVideoIDs.get(r)));
+    }
+
+    private RecipesProvider createRecipeProvider(List<Recipe> recipesList) {
+        RecipesFactory recipesLocalFinder = new LocalRecipesFactory();
+        String recipesPath =  "";
+        HashSet<Recipe> recipes = new HashSet<>(recipesList);
+        RecipesUpdater recipesUpdater = new RecipesUpdater(recipesLocalFinder,  List.of(recipesPath.split(",")),  recipes);
+        recipesProvider = new RecipesProvider(recipes, recipesUpdater);
+        return recipesProvider;
     }
 }
