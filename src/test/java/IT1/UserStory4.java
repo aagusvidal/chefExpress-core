@@ -1,15 +1,17 @@
 package IT1;
 
 import core.ChefExpress;
+import core.RecipesUpdater;
+import entities.Recipe;
+import finders.LocalRecipesFactory;
+import finders.RecipesProvider;
 import interfaces.RecipeScorer;
+import interfaces.RecipesFactory;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -21,6 +23,7 @@ public class UserStory4
     private RecipeScorer scorerSaludable;
     private RecipeScorer scorerCeliac;
 
+    private RecipesProvider recipesProvider;
     private Map<String, RecipeScorer> scorersMockEmpty;
     @BeforeEach
     public void setUp()
@@ -32,7 +35,8 @@ public class UserStory4
         scorersMockEmpty = new HashMap<String, RecipeScorer>();
         scorersMockEmpty.put(scorerSaludable.getName(), scorerSaludable);
         scorersMockEmpty.put(scorerCeliac.getName(), scorerCeliac);
-        chefExpress = new ChefExpress(new HashSet<>(Collections.emptyList()), scorerSaludable, scorersMockEmpty);
+        recipesProvider = this.createRecipeProvider(new ArrayList<Recipe>());
+        chefExpress = new ChefExpress(recipesProvider, scorerSaludable, scorersMockEmpty);
     }
 
     @Test
@@ -64,5 +68,14 @@ public class UserStory4
     {
         chefExpress.setScorer("Banana");
         assertEquals(chefExpress.getScorerName(), scorerSaludable.getName());
+    }
+
+    private RecipesProvider createRecipeProvider(List<Recipe> recipesList) {
+        RecipesFactory recipesLocalFinder = new LocalRecipesFactory();
+        String recipesPath =  "";
+        HashSet<Recipe> recipes = new HashSet<>(recipesList);
+        RecipesUpdater recipesUpdater = new RecipesUpdater(recipesLocalFinder,  List.of(recipesPath.split(",")),  recipes);
+        recipesProvider = new RecipesProvider(recipes, recipesUpdater);
+        return recipesProvider;
     }
 }

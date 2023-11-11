@@ -2,8 +2,12 @@ package IT1;
 
 import core.ChefExpress;
 import core.HistoricalRecipesCounter;
+import core.RecipesUpdater;
 import entities.Recipe;
+import finders.LocalRecipesFactory;
+import finders.RecipesProvider;
 import interfaces.RecipeScorer;
+import interfaces.RecipesFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,6 +25,8 @@ public class UserStory3
     private ChefExpress chefExpress;
     private List<Recipe> recipes;
 
+    private RecipesProvider recipesProvider;
+
     @BeforeEach
     public void setUp()
     {
@@ -28,8 +34,8 @@ public class UserStory3
         recipes = mockRecipes(recipeIds);
 
         scorerMock = mock(RecipeScorer.class);
-
-        chefExpress = new ChefExpress(new HashSet<>(recipes), scorerMock, new HashMap<>());
+        recipesProvider = this.createRecipeProvider(recipes);
+        chefExpress = new ChefExpress(recipesProvider, scorerMock, new HashMap<>());
         historicalRecipesCounter = new HistoricalRecipesCounter(chefExpress);
     }
 
@@ -90,5 +96,14 @@ public class UserStory3
         return ids.stream()
                 .map(recipeId -> new Recipe(recipeId, "recipe " + recipeId, new HashMap<>()))
                 .collect(Collectors.toList());
+    }
+
+    private RecipesProvider createRecipeProvider(List<Recipe> recipesList) {
+        RecipesFactory recipesLocalFinder = new LocalRecipesFactory();
+        String recipesPath =  "";
+        HashSet<Recipe> recipes = new HashSet<>(recipesList);
+        RecipesUpdater recipesUpdater = new RecipesUpdater(recipesLocalFinder,  List.of(recipesPath.split(",")),  recipes);
+        recipesProvider = new RecipesProvider(recipes, recipesUpdater);
+        return recipesProvider;
     }
 }

@@ -1,7 +1,11 @@
 package IT0;
 
+import core.RecipesUpdater;
 import entities.Recipe;
+import finders.LocalRecipesFactory;
+import finders.RecipesProvider;
 import interfaces.RecipeScorer;
+import interfaces.RecipesFactory;
 import jdk.jfr.Description;
 import core.ChefExpress;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +27,8 @@ public class UserStory1
 
     private Map<String, RecipeScorer> scorersMockEmpty;
 
+    private RecipesProvider recipesProvider;
+
     @BeforeEach
     public void setUp() {
         unsortedRecipes = List.of(
@@ -34,9 +40,10 @@ public class UserStory1
                 mockRecipe(2, "most-value-recipe"),
                 mockRecipe(1, "medium-value-recipe")
         );
+        RecipesProvider recipesProvider = this.createRecipeProvider(unsortedRecipes);
         scorerSaludable = mock(RecipeScorer.class);
         scorersMockEmpty = new HashMap<String, RecipeScorer>();
-        chefExpress = new ChefExpress(new HashSet<>(unsortedRecipes), scorerSaludable, scorersMockEmpty);
+        chefExpress = new ChefExpress(recipesProvider, scorerSaludable, scorersMockEmpty);
     }
 
     @Test
@@ -94,7 +101,8 @@ public class UserStory1
         @Description("Recomendación sin recetas")
         public void ca4RecomendacionSinRecetas()
         {
-            chefExpress = new ChefExpress(new HashSet<>(), scorerSaludable, scorersMockEmpty);
+            recipesProvider = this.createRecipeProvider(new ArrayList<Recipe>());
+            chefExpress = new ChefExpress(recipesProvider, scorerSaludable, scorersMockEmpty);
 
             List<Recipe> recommendations = chefExpress.recommend();
 
@@ -105,8 +113,9 @@ public class UserStory1
         @Description("Recetas sin puntaje")
         public void ca5RecetaSinPuntaje() {
             final Recipe recipe = mockRecipe(0, "not-scored-recipe");
-            final Set<Recipe> unScoredRecipes = Set.of(recipe);
-            chefExpress = new ChefExpress(unScoredRecipes, scorerSaludable, scorersMockEmpty);
+            final List<Recipe> unScoredRecipes = List.of(recipe);
+            recipesProvider = this.createRecipeProvider(unScoredRecipes);
+            chefExpress = new ChefExpress(recipesProvider, scorerSaludable, scorersMockEmpty);
 
             when(scorerSaludable.score(recipe)).thenReturn(0);
 
@@ -122,5 +131,14 @@ public class UserStory1
                 "ingredient-3", 30.0f
         );
         return new Recipe(id, name, ingredients);
+    }
+
+    private RecipesProvider createRecipeProvider(List<Recipe> recipesList) {
+        RecipesFactory recipesLocalFinder = new LocalRecipesFactory();
+        String recipesPath =  "";
+        HashSet<Recipe> recipes = new HashSet<>(recipesList);
+        RecipesUpdater recipesUpdater = new RecipesUpdater(recipesLocalFinder,  List.of(recipesPath.split(",")),  recipes);
+        recipesProvider = new RecipesProvider(recipes, recipesUpdater);
+        return recipesProvider;
     }
 }

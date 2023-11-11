@@ -4,6 +4,7 @@ import core.ChefExpress;
 import core.RecipesUpdater;
 import entities.Recipe;
 import finders.LocalRecipesFactory;
+import finders.RecipesProvider;
 import interfaces.RecipesFactory;
 
 import java.util.List;
@@ -23,13 +24,13 @@ public class ChefExpressInit
     {
         RecipesFactory recipesLocalFinder = new LocalRecipesFactory();
         Set<Recipe> recipes = recipesLocalFinder.findRecipes("/"+ chefExpressProperties.getProperty("RecipesPath"));
+        String recipesPath = chefExpressProperties.getProperty("RecipesUpdaterPath");
+        RecipesUpdater recipesUpdater = new RecipesUpdater(recipesLocalFinder,  List.of(recipesPath.split(",")),  recipes);
+        RecipesProvider recipesProvider = new RecipesProvider(recipes, recipesUpdater);
 
         String chefExpressScorersPath = chefExpressProperties.getProperty("ScorersPath");
-        ChefExpress chefExpress = chefExpressFactory.createChefExpress(chefExpressScorersPath, recipes);
+        ChefExpress chefExpress = chefExpressFactory.createChefExpress(chefExpressScorersPath, recipesProvider);
 
-        String recipesPath = chefExpressProperties.getProperty("RecipesUpdaterPath");
-        RecipesUpdater recipesUpdater = new RecipesUpdater(1L, recipesLocalFinder,
-                                            List.of(recipesPath.split(",")));
         recipesUpdater.attach(chefExpress);
 
         return chefExpress;
