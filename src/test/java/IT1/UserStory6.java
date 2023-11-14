@@ -18,6 +18,7 @@ import static org.mockito.Mockito.mock;
 public class UserStory6
 {
     private ChefExpress chefExpress;
+
     private RecipesUpdater recipesUpdater;
     private List<Recipe> uniqueRecipes;
     private List<Recipe> noRecipes;
