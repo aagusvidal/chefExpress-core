@@ -4,7 +4,7 @@ import core.ChefExpress;
 import core.RecipesUpdater;
 import entities.Recipe;
 import finders.LocalRecipesFactory;
-import finders.RecipesProvider;
+import core.RecipesProvider;
 import interfaces.RecipeScorer;
 import interfaces.RecipesFactory;
 import jdk.jfr.Description;
@@ -99,7 +99,7 @@ public class UserStory3
         String recipesPath =  "";
         HashSet<Recipe> recipes = new HashSet<>(recipesList);
         RecipesUpdater recipesUpdater = new RecipesUpdater(recipesLocalFinder,  List.of(recipesPath.split(",")),  recipes);
-        RecipesProvider recipesProvider = new RecipesProvider(recipes, recipesUpdater);
+        RecipesProvider recipesProvider = new RecipesProvider(recipesUpdater);
         return recipesProvider;
     }
 }

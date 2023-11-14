@@ -4,8 +4,7 @@ import core.ChefExpress;
 import core.RecipesUpdater;
 import entities.Recipe;
 import finders.LocalRecipesFactory;
-import finders.RecipesProvider;
-import finders.RecipesVideoUpdater;
+import core.RecipesProvider;
 import interfaces.RecipeScorer;
 import interfaces.RecipesFactory;
 import jdk.jfr.Description;
@@ -30,7 +29,7 @@ public class UserStory5
 
     private RecipeScorer scorerMock;
 
-    private RecipesVideoUpdater videoSearcher;
+    private RecipesUpdater.RecipesVideoUpdater videoSearcher;
 
     private Map<String, List<String>> recipeVideoIDs;
     private Map<String, String> expectedLinks;
@@ -66,7 +65,7 @@ public class UserStory5
     @Description("Receta con múltiples videos")
     public void ca1RecetaConMultiplesVideos()
     {
-        this.videoSearcher = new RecipesVideoUpdater(YTService, YT_PATH, chefExpress);
+        this.videoSearcher = new RecipesUpdater.RecipesVideoUpdater(YTService, YT_PATH, chefExpress);
 
         Assertions.assertEquals(this.expectedLinks.get("R1"), this.videoSearcher.searchLink("R1"));
     }
@@ -75,7 +74,7 @@ public class UserStory5
     @Description("Receta con un video")
     public void ca2RecetaConUnVideo()
     {
-        this.videoSearcher = new RecipesVideoUpdater(YTService, YT_PATH, chefExpress);
+        this.videoSearcher = new RecipesUpdater.RecipesVideoUpdater(YTService, YT_PATH, chefExpress);
 
         Assertions.assertEquals(this.expectedLinks.get("R2"), this.videoSearcher.searchLink("R2"));
     }
@@ -84,7 +83,7 @@ public class UserStory5
     @Description("Receta sin video")
     public void ca3RecetaSinVideo()
     {
-        this.videoSearcher = new RecipesVideoUpdater(YTService, YT_PATH, chefExpress);
+        this.videoSearcher = new RecipesUpdater.RecipesVideoUpdater(YTService, YT_PATH, chefExpress);
 
         Assertions.assertEquals(this.expectedLinks.get("R3"), this.videoSearcher.searchLink("R3"));
     }
@@ -93,7 +92,7 @@ public class UserStory5
     @Description("Busqueda sin nombre de receta")
     public void ca4BusquedaSinNombreDeReceta()
     {
-        this.videoSearcher = new RecipesVideoUpdater(YTService, YT_PATH, chefExpress);
+        this.videoSearcher = new RecipesUpdater.RecipesVideoUpdater(YTService, YT_PATH, chefExpress);
 
         Assertions.assertEquals("", this.videoSearcher.searchLink(""));
     }
@@ -110,7 +109,7 @@ public class UserStory5
         String recipesPath =  "";
         HashSet<Recipe> recipes = new HashSet<>(recipesList);
         RecipesUpdater recipesUpdater = new RecipesUpdater(recipesLocalFinder,  List.of(recipesPath.split(",")),  recipes);
-        recipesProvider = new RecipesProvider(recipes, recipesUpdater);
+        recipesProvider = new RecipesProvider(recipesUpdater);
         return recipesProvider;
     }
 }
