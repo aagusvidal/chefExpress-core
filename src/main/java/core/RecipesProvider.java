@@ -24,6 +24,7 @@ public class RecipesProvider implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-
+        Set<Recipe> recipes = (Set<Recipe>) evt.getNewValue();
+        this.setRecipes(recipes);
     }
 }
