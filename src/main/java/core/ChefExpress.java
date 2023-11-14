@@ -1,7 +1,6 @@
 package core;
 
 import entities.Recipe;
-import finders.RecipesProvider;
 import interfaces.RecipeScorer;
 
 import java.beans.PropertyChangeEvent;

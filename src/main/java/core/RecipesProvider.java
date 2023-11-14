@@ -1,0 +1,29 @@
+package core;
+
+import entities.Recipe;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Set;
+
+public class RecipesProvider implements PropertyChangeListener {
+
+    private Set<Recipe> recipes;
+
+    public RecipesProvider(RecipesUpdater recipesUpdater) {
+       this.recipes = recipesUpdater.getRecipes();
+    }
+
+    public Set<Recipe> getRecipes(){
+        return this.recipes;
+    }
+
+    public void setRecipes(Set<Recipe> recipes) {
+        this.recipes = recipes;
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+
+    }
+}

@@ -1,14 +1,14 @@
 package factories;
 
 import core.ChefExpress;
-import finders.RecipesVideoUpdater;
+import core.RecipesUpdater;
 import services.YTService;
 
 import java.util.Properties;
 
 public class VideoSearcherFactory
 {
-    public RecipesVideoUpdater create(Properties properties, ChefExpress chefExpress)
+    public RecipesUpdater.RecipesVideoUpdater create(Properties properties, ChefExpress chefExpress)
     {
         String ytApiPath = properties.getProperty("YTApiPath");
         String apiKey = properties.getProperty("YTApiKey");
@@ -16,6 +16,6 @@ public class VideoSearcherFactory
 
         YTService ytService = new YTService(ytApiPath, apiKey);
 
-        return new RecipesVideoUpdater(ytService, ytBasePath, chefExpress);
+        return new RecipesUpdater.RecipesVideoUpdater(ytService, ytBasePath, chefExpress);
     }
 }

@@ -1,6 +1,8 @@
 package factories;
 
 import core.ChefExpress;
+import core.RecipesProvider;
+import core.RecipesUpdater;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -8,17 +10,20 @@ import java.util.Properties;
 
 public class ChefExpressBuilder
 {
-    private ChefExpressInit chefExpressInit;
+    private ChefExpressFactory chefExpressFactory;
 
     public ChefExpressBuilder()
     {
-        this.chefExpressInit =  new ChefExpressInit();
+        this.chefExpressFactory =  new ChefExpressFactory();
     }
 
-    public ChefExpress build(String propertyPath) throws Exception
+    public ChefExpress build(String propertyPath, RecipesUpdater recipesUpdater) throws Exception
     {
-        Properties chefExpressProperties = loadProperties(propertyPath);;
-        return this.chefExpressInit.initChefExpress(chefExpressProperties);
+        Properties chefExpressProperties = loadProperties(propertyPath);
+        String chefExpressScorersPath = chefExpressProperties.getProperty("ScorersPath");
+        RecipesProvider recipesProvider = new RecipesProvider(recipesUpdater);
+        recipesUpdater.attach(recipesProvider);
+        return this.chefExpressFactory.createChefExpress(chefExpressScorersPath, recipesProvider);
     }
 
     private Properties loadProperties(String configPath)

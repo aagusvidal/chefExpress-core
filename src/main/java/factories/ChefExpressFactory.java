@@ -1,7 +1,7 @@
 package factories;
 
 import core.ChefExpress;
-import finders.RecipesProvider;
+import core.RecipesProvider;
 import interfaces.RecipeScorer;
 
 import java.util.HashMap;
