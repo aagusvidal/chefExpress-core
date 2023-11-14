@@ -1,0 +1,18 @@
+[
+    {
+        "id": 1,
+        "name": "Hamburguesa con papas fritas",
+        "ingredients": {
+            "Carne de hamburguesa": 1,
+            "Pan de hamburguesa": 1
+        }
+    },
+    {
+        "id": 2,
+        "name": "Ensalada de quinoa con espinacas",
+        "ingredients": {
+            "Quinoa": 1.0,
+            "Espinacas": 2.0
+        }
+    }
+]
