@@ -60,7 +60,7 @@ public class Recipe {
 
 		if (id != recipe.id) return false;
 		if (!name.equals(recipe.name)) return false;
-		return ingredients.equals(recipe.ingredients);
+		return true;
 	}
 
 	@Override

@@ -23,8 +23,9 @@ public class RecipeParser {
         {
             InputStream inputStream = RecipeParser.class.getResourceAsStream(filePath);
             TypeReference<Set<Recipe>> typeReference = new TypeReference<Set<Recipe>>() {};
-            recipes = objectMapper.readValue(inputStream, typeReference);
-
+            if(inputStream != null) {
+                recipes = objectMapper.readValue(inputStream, typeReference);
+            }
             return recipes;
         } catch (IOException e) { e.printStackTrace(); }
 
