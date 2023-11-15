@@ -13,10 +13,6 @@ import java.util.Set;
 
 public class RecipesUpdaterFactory {
 
-    public RecipesUpdaterFactory(){
-
-    }
-
     public RecipesUpdater createRecipesUpdater(String propertyPath){
         Properties chefExpressProperties = loadProperties(propertyPath);
         RecipesFactory recipesLocalFinder = new LocalRecipesFactory();
