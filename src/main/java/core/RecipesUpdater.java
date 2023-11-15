@@ -2,13 +2,11 @@ package core;
 
 import entities.Recipe;
 import interfaces.RecipesFactory;
-import services.YTService;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -19,11 +17,14 @@ public class RecipesUpdater implements PropertyChangeListener {
     private RecipesFactory recipesFinder;
     private List<String> paths;
 
+    private int numberPath;
+
     public RecipesUpdater(RecipesFactory recipesFinder, List<String> paths, Set<Recipe> recipes) {
         this.recipesFinder = recipesFinder;
         this.paths = paths;
         this.support = new PropertyChangeSupport(this);
         this.recipes = recipes;
+        this.numberPath = 0;
     }
 
     public void attach(PropertyChangeListener pcl) {
@@ -52,9 +53,14 @@ public class RecipesUpdater implements PropertyChangeListener {
     }
 
     public void updateRecipes() {
-        int number = Math.max(0, this.paths.size() - 1);
-        int randomIndex = new Random().nextInt(number + 1 );
-        setRecipes(this.recipesFinder.findRecipes(this.paths.get(randomIndex)));
+        if(numberPath<this.paths.size()) {
+            setRecipes(this.recipesFinder.findRecipes(this.paths.get(numberPath)));
+            numberPath++;
+        }else{
+            numberPath = 0;
+            setRecipes(this.recipesFinder.findRecipes(this.paths.get(numberPath)));
+
+        }
     }
 
     public Set<Recipe> getRecipes(){
