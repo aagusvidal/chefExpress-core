@@ -1,0 +1,10 @@
+[
+    {
+        "id": 1,
+        "name": "R1",
+        "ingredients": {
+            "ingredient-1": 1.0,
+            "ingredient-2": 1.0
+        }
+    }
+]

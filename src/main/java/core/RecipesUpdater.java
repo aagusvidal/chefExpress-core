@@ -15,6 +15,7 @@ public class RecipesUpdater implements PropertyChangeListener {
     private PropertyChangeSupport support;
     private Set<Recipe> recipes;
     private RecipesFactory recipesFinder;
+
     private List<String> paths;
 
     private int numberPath;
@@ -36,11 +37,8 @@ public class RecipesUpdater implements PropertyChangeListener {
     }
 
     private void setRecipes(Set<Recipe> recipes) {
-        if(! recipes.isEmpty())
-        {
             support.firePropertyChange("Recipes", this.recipes, recipes);
             this.recipes = recipes;
-        }
     }
 
     private void executeUpdateScheduleTask(Long updateTime) {
@@ -52,6 +50,14 @@ public class RecipesUpdater implements PropertyChangeListener {
         return this::updateRecipes;
     }
 
+    public int getNumberPath() {
+        return numberPath;
+    }
+
+    public void setNumberPath(int numberPath) {
+        this.numberPath = numberPath;
+    }
+
     public void updateRecipes() {
         if(numberPath<this.paths.size()) {
             setRecipes(this.recipesFinder.findRecipes(this.paths.get(numberPath)));
@@ -59,7 +65,6 @@ public class RecipesUpdater implements PropertyChangeListener {
         }else{
             numberPath = 0;
             setRecipes(this.recipesFinder.findRecipes(this.paths.get(numberPath)));
-
         }
     }
 
@@ -70,5 +75,13 @@ public class RecipesUpdater implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
 
+    }
+
+    public List<String> getPaths() {
+        return paths;
+    }
+
+    public void setPaths(List<String> paths) {
+        this.paths = paths;
     }
 }

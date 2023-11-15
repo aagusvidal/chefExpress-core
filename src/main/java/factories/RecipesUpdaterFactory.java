@@ -17,7 +17,7 @@ public class RecipesUpdaterFactory {
 
     }
 
-    public RecipesUpdater  createRecipesUpdater(String propertyPath){
+    public RecipesUpdater createRecipesUpdater(String propertyPath){
         Properties chefExpressProperties = loadProperties(propertyPath);
         RecipesFactory recipesLocalFinder = new LocalRecipesFactory();
         Set<Recipe> recipes = recipesLocalFinder.findRecipes("/"+ chefExpressProperties.getProperty("RecipesPath"));
@@ -26,7 +26,7 @@ public class RecipesUpdaterFactory {
         return recipesUpdater;
     }
 
-    private Properties loadProperties(String configPath)
+    public Properties loadProperties(String configPath)
     {
         Properties prop = new Properties();
         try
