@@ -2,6 +2,7 @@ package IT1;
 
 import core.ChefExpress;
 import core.RecipesUpdater;
+import core.VideoRecipesUpdater;
 import entities.Recipe;
 import finders.LocalRecipesFactory;
 import core.RecipesProvider;
@@ -29,7 +30,7 @@ public class UserStory5
 
     private RecipeScorer scorerMock;
 
-    private RecipesUpdater.RecipesVideoUpdater videoSearcher;
+    private VideoRecipesUpdater videoSearcher;
 
     private Map<String, List<String>> recipeVideoIDs;
     private Map<String, String> expectedLinks;
@@ -65,7 +66,7 @@ public class UserStory5
     @Description("Receta con múltiples videos")
     public void ca1RecetaConMultiplesVideos()
     {
-        this.videoSearcher = new RecipesUpdater.RecipesVideoUpdater(YTService, YT_PATH, chefExpress);
+        this.videoSearcher = new VideoRecipesUpdater(YTService, YT_PATH, chefExpress);
 
         Assertions.assertEquals(this.expectedLinks.get("R1"), this.videoSearcher.searchLink("R1"));
     }
@@ -74,7 +75,7 @@ public class UserStory5
     @Description("Receta con un video")
     public void ca2RecetaConUnVideo()
     {
-        this.videoSearcher = new RecipesUpdater.RecipesVideoUpdater(YTService, YT_PATH, chefExpress);
+        this.videoSearcher = new VideoRecipesUpdater(YTService, YT_PATH, chefExpress);
 
         Assertions.assertEquals(this.expectedLinks.get("R2"), this.videoSearcher.searchLink("R2"));
     }
@@ -83,7 +84,7 @@ public class UserStory5
     @Description("Receta sin video")
     public void ca3RecetaSinVideo()
     {
-        this.videoSearcher = new RecipesUpdater.RecipesVideoUpdater(YTService, YT_PATH, chefExpress);
+        this.videoSearcher = new VideoRecipesUpdater(YTService, YT_PATH, chefExpress);
 
         Assertions.assertEquals(this.expectedLinks.get("R3"), this.videoSearcher.searchLink("R3"));
     }
@@ -92,7 +93,7 @@ public class UserStory5
     @Description("Busqueda sin nombre de receta")
     public void ca4BusquedaSinNombreDeReceta()
     {
-        this.videoSearcher = new RecipesUpdater.RecipesVideoUpdater(YTService, YT_PATH, chefExpress);
+        this.videoSearcher = new VideoRecipesUpdater(YTService, YT_PATH, chefExpress);
 
         Assertions.assertEquals("", this.videoSearcher.searchLink(""));
     }

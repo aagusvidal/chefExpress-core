@@ -3,6 +3,7 @@ package factories;
 import core.ChefExpress;
 import core.RecipesProvider;
 import core.RecipesUpdater;
+import core.VideoRecipesUpdater;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,10 +21,17 @@ public class ChefExpressBuilder
     public ChefExpress build(String propertyPath, RecipesUpdater recipesUpdater) throws Exception
     {
         Properties chefExpressProperties = loadProperties(propertyPath);
+        Properties videoProperties = loadProperties(chefExpressProperties.getProperty("VideoUpdaterProperties"));
         String chefExpressScorersPath = chefExpressProperties.getProperty("ScorersPath");
         RecipesProvider recipesProvider = new RecipesProvider(recipesUpdater);
         recipesUpdater.attach(recipesProvider);
-        return this.chefExpressFactory.createChefExpress(chefExpressScorersPath, recipesProvider);
+
+        ChefExpress recommender = this.chefExpressFactory.createChefExpress(chefExpressScorersPath, recipesProvider);
+
+        VideoRecipeUpdaterFactory videoRecipesUpdaterFactory = new VideoRecipeUpdaterFactory();
+        VideoRecipesUpdater videoRecipeUpdater = videoRecipesUpdaterFactory.create(videoProperties, recommender);
+
+        return recommender;
     }
 
     private Properties loadProperties(String configPath)
