@@ -12,18 +12,16 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class ChefExpress implements PropertyChangeListener
-{
+public class ChefExpress implements PropertyChangeListener {
     private PropertyChangeSupport support;
 
     protected RecipesProvider recipesProvider;
 
-    protected Map<String, RecipeScorer>possiblesScorers;
-    protected  RecipeScorer scorer;
+    protected Map<String, RecipeScorer> possiblesScorers;
+    protected RecipeScorer scorer;
     private List<Recipe> recipeRecommendations;
 
-    public ChefExpress(RecipesProvider recipesProvider, RecipeScorer scorer, Map<String, RecipeScorer> possiblesScorers)
-    {
+    public ChefExpress(RecipesProvider recipesProvider, RecipeScorer scorer, Map<String, RecipeScorer> possiblesScorers) {
         this.recipesProvider = recipesProvider;
         this.scorer = scorer;
         this.recipeRecommendations = new ArrayList<>();
@@ -31,8 +29,7 @@ public class ChefExpress implements PropertyChangeListener
         this.support = new PropertyChangeSupport(this);
     }
 
-    public List<Recipe> recommend()
-    {
+    public List<Recipe> recommend() {
         List<Recipe> recipeRecommendations = this.recipesProvider.getRecipes()
                 .stream()
                 .filter(recipe -> scorer.score(recipe) != 0)
@@ -51,22 +48,20 @@ public class ChefExpress implements PropertyChangeListener
         support.removePropertyChangeListener(pcl);
     }
 
-    private void setRecommendations(List<Recipe> recommendations)
-    {
+    private void setRecommendations(List<Recipe> recommendations) {
         support.firePropertyChange("Recipe recommendations", this.recipeRecommendations, recommendations);
         this.recipeRecommendations = recommendations;
     }
 
-    public void setScorer(String scorerName)
-    {
+    public void setScorer(String scorerName) {
         if (scorerName == null)
             throw new IllegalArgumentException();
         else
-           this.setImplementationScorer(scorerName);
+            this.setImplementationScorer(scorerName);
     }
 
     private void setImplementationScorer(String scorerName) {
-        if(possiblesScorers.containsKey(scorerName)){
+        if (possiblesScorers.containsKey(scorerName)) {
             this.scorer = possiblesScorers.get(scorerName);
         }
     }
@@ -75,14 +70,12 @@ public class ChefExpress implements PropertyChangeListener
         return scorer;
     }
 
-    public String getScorerName()
-    {
+    public String getScorerName() {
         return scorer.getName();
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt)
-    {
+    public void propertyChange(PropertyChangeEvent evt) {
         Set<Recipe> recipes = (Set<Recipe>) evt.getNewValue();
         this.setRecipes(recipes);
         this.setRecommendations(this.recommend());
@@ -92,9 +85,11 @@ public class ChefExpress implements PropertyChangeListener
         this.recipesProvider.setRecipes(recipes);
     }
 
-    public Set<Recipe> getRecipes(){return this.recipesProvider.getRecipes();}
+    public Set<Recipe> getRecipes() {
+        return this.recipesProvider.getRecipes();
+    }
 
-    public String[] scorersNamesArray(){
+    public String[] scorersNamesArray() {
         List<String> scorersList = new ArrayList<>(this.possiblesScorers.keySet());
         return scorersList.toArray(new String[0]);
     }
