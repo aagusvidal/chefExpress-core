@@ -6,6 +6,7 @@ import core.RecipesUpdater;
 import entities.Recipe;
 import factories.RecipesUpdaterFactory;
 import interfaces.RecipeScorer;
+import jdk.jfr.Description;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -43,6 +44,7 @@ public class UserStory6
     }
 
     @Test
+    @Description("Propagación de nuevas recetas")
     public void ca1PropagacionDeNuevasRecetas()
     {
         recipesUpdater.attach(recipesProvider);
@@ -53,7 +55,8 @@ public class UserStory6
     }
 
     @Test
-    public void ca2sinPropagacionDeRecetas()
+    @Description("Propagación sin recetas")
+    public void ca2PropagacionSinRecetas()
     {
         recipesUpdater.attach(recipesProvider);
         recipesUpdater.setNumberPath(2);
@@ -63,6 +66,7 @@ public class UserStory6
     }
 
     @Test
+    @Description("Desuscripción de observadores")
     public void ca3DesuscripcionDeObservadores()
     {
         recipesUpdater.detach(chefExpress);
