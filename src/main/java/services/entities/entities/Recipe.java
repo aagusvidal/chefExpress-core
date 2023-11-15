@@ -9,6 +9,16 @@ public class Recipe {
 
 	protected Map<String, Float> ingredients;
 
+	public String getVideoLink() {
+		return videoLink;
+	}
+
+	public void setVideoLink(String videoLink) {
+		this.videoLink = videoLink;
+	}
+
+	protected String videoLink;
+
 	public Recipe(){
 
 	}
