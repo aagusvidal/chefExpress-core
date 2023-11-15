@@ -6,26 +6,22 @@ import java.util.Map;
 public class Recipe {
 	protected int id;
 	protected String name;
-
 	protected Map<String, Float> ingredients;
-
-	public String getVideoLink() {
-		return videoLink;
-	}
-
-	public void setVideoLink(String videoLink) {
-		this.videoLink = videoLink;
-	}
-
 	protected String videoLink;
 
-	public Recipe(){
+	public Recipe() { }
 
-	}
 	public Recipe(int id, String name, Map<String, Float> ingredients) {
 		this.id = id;
 		this.name = name;
 		this.ingredients = ingredients;
+	}
+
+	public Recipe(int id, String name, Map<String, Float> ingredients, String videoLink) {
+		this.id = id;
+		this.name = name;
+		this.ingredients = ingredients;
+		this.videoLink = videoLink;
 	}
 
 	public int getId() {
@@ -49,6 +45,14 @@ public class Recipe {
 	}
 	public void setIngredients(HashMap<String, Float> ingredients) {
 		this.ingredients = ingredients;
+	}
+
+	public String getVideoLink() {
+		return videoLink;
+	}
+
+	public void setVideoLink(String videoLink) {
+		this.videoLink = videoLink;
 	}
 
 	@Override
