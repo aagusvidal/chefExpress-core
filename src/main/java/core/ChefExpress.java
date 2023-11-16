@@ -93,4 +93,9 @@ public class ChefExpress implements PropertyChangeListener {
         List<String> scorersList = new ArrayList<>(this.possiblesScorers.keySet());
         return scorersList.toArray(new String[0]);
     }
+
+    public List<Recipe> getRecipeRecommendations()
+    {
+        return recipeRecommendations;
+    }
 }
