@@ -12,10 +12,9 @@ public class VideoRecipeUpdaterFactory
     {
         String ytApiPath = properties.getProperty("YTApiPath");
         String apiKey = properties.getProperty("YTApiKey");
-        String ytBasePath = properties.getProperty("YTBasePath");
 
         YTService ytService = new YTService(ytApiPath, apiKey);
 
-        return new VideoRecipesUpdater(ytService, ytBasePath, chefExpress);
+        return new VideoRecipesUpdater(ytService, chefExpress);
     }
 }

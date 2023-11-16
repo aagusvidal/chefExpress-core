@@ -15,6 +15,7 @@ public class Recipe {
 		this.id = id;
 		this.name = name;
 		this.ingredients = ingredients;
+		this.videoLink = "";
 	}
 
 	public Recipe(int id, String name, Map<String, Float> ingredients, String videoLink) {
@@ -64,6 +65,10 @@ public class Recipe {
 
 		if (id != recipe.id) return false;
 		if (!name.equals(recipe.name)) return false;
+
+		if (videoLink != "")
+			if(!videoLink.equals(recipe.videoLink)) return false;
+
 		return true;
 	}
 
@@ -73,6 +78,7 @@ public class Recipe {
 				"id=" + id +
 				", name='" + name + '\'' +
 				", ingredients=" + ingredients +
+				", link=" + videoLink +
 				'}';
 	}
 }
