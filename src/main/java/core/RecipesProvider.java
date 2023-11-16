@@ -12,6 +12,7 @@ public class RecipesProvider implements PropertyChangeListener {
 
     public RecipesProvider(RecipesUpdater recipesUpdater) {
        this.recipes = recipesUpdater.getRecipes();
+        recipesUpdater.attach(this);
     }
 
     public Set<Recipe> getRecipes(){

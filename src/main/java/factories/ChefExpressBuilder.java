@@ -24,7 +24,6 @@ public class ChefExpressBuilder
         Properties videoProperties = loadProperties(chefExpressProperties.getProperty("VideoUpdaterProperties"));
         String chefExpressScorersPath = chefExpressProperties.getProperty("ScorersPath");
         RecipesProvider recipesProvider = new RecipesProvider(recipesUpdater);
-        recipesUpdater.attach(recipesProvider);
 
         ChefExpress recommender = this.chefExpressFactory.createChefExpress(chefExpressScorersPath, recipesProvider);
 

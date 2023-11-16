@@ -4,8 +4,8 @@ import core.ChefExpress;
 import core.RecipesProvider;
 import core.RecipesUpdater;
 import entities.Recipe;
-import factories.RecipesUpdaterFactory;
 import interfaces.RecipeScorer;
+import interfaces.RecipesFactory;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,62 +14,62 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 public class UserStory6
 {
     private static String basePath = "build/resources/test/";
     private ChefExpress chefExpress;
-
     private RecipesUpdater recipesUpdater;
     private Set<Recipe> defaultRecipes;
     private Set<Recipe> noRecipes;
     private Set<Recipe> modifiedRecipes;
-
+    private RecipesFactory recipesFinder;
     private RecipesProvider recipesProvider;
 
     @BeforeEach
     public void setUp()
     {
         this.defaultRecipes = new HashSet<>(List.of(mockRecipe(1, "R1")));
+        this.modifiedRecipes = new HashSet<>(List.of(mockRecipe(2, "R2")));
         this.noRecipes = new HashSet<>();
 
-        RecipeScorer scorerSaludable = mock(RecipeScorer.class);
-        modifiedRecipes = new HashSet<>(List.of(mockRecipe(2, "R2")));
-        Map<String, RecipeScorer> scorers = new HashMap<String, RecipeScorer>();
-        recipesUpdater =  this.createRecipesUpdater();
-        recipesProvider = new RecipesProvider(recipesUpdater);
-        chefExpress = new ChefExpress(recipesProvider,scorerSaludable, scorers);
+        recipesFinder = mock(RecipesFactory.class);
+        recipesUpdater = new RecipesUpdater(recipesFinder, List.of(""), defaultRecipes );
 
+        recipesProvider = new RecipesProvider(recipesUpdater);
+
+        chefExpress = new ChefExpress(recipesProvider, mock(RecipeScorer.class), new HashMap<String, RecipeScorer>());
     }
 
     @Test
     @Description("Propagación de nuevas recetas")
     public void ca1PropagacionDeNuevasRecetas()
     {
-        recipesUpdater.attach(recipesProvider);
-        recipesUpdater.setNumberPath(0);
+        when(recipesFinder.findRecipes("")).thenReturn(this.modifiedRecipes);
         recipesUpdater.updateRecipes();
 
-       assertTrue(this.recipesEquals(chefExpress.getRecipes(), modifiedRecipes));
+        assertTrue(this.recipesEquals(chefExpress.getRecipes(), modifiedRecipes));
     }
 
     @Test
     @Description("Propagación sin recetas")
     public void ca2PropagacionSinRecetas()
     {
-        recipesUpdater.attach(recipesProvider);
-        recipesUpdater.setNumberPath(2);
+        when(recipesFinder.findRecipes("")).thenReturn(noRecipes);
         recipesUpdater.updateRecipes();
 
-    assertTrue(this.recipesEquals(chefExpress.getRecipes(), noRecipes));
+        assertTrue(this.recipesEquals(chefExpress.getRecipes(), noRecipes));
     }
 
     @Test
     @Description("Desuscripción de observadores")
     public void ca3DesuscripcionDeObservadores()
     {
-        recipesUpdater.detach(chefExpress);
+        recipesUpdater.detach(this.recipesProvider);
+
+        when(recipesFinder.findRecipes("")).thenReturn(this.modifiedRecipes);
         recipesUpdater.updateRecipes();
 
         assertTrue(this.recipesEquals(chefExpress.getRecipes(), defaultRecipes));
@@ -83,17 +83,6 @@ public class UserStory6
 
         );
         return new Recipe(id, name, ingredients);
-    }
-
-    private RecipesUpdater createRecipesUpdater() {
-        RecipesUpdaterFactory recipesUpdaterFactory = new RecipesUpdaterFactory();
-        String pathConfig = basePath + "chefExpress.properties";
-        RecipesUpdater recipesUpdater = recipesUpdaterFactory.createRecipesUpdater(pathConfig);
-        Properties chefExpressProperties = recipesUpdaterFactory.loadProperties(pathConfig);
-        List<String> pathsWithEmpty = new ArrayList<>(recipesUpdater.getPaths());
-        pathsWithEmpty.add(chefExpressProperties.getProperty("RecipesEmptyPath"));
-        recipesUpdater.setPaths(pathsWithEmpty);
-        return recipesUpdater;
     }
 
     private boolean recipesEquals(Set<Recipe> recipes, Set<Recipe> baseRecipes) {
