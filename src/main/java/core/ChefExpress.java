@@ -48,7 +48,7 @@ public class ChefExpress implements PropertyChangeListener {
         support.removePropertyChangeListener(pcl);
     }
 
-    private void setRecommendations(List<Recipe> recommendations) {
+    public void setRecommendations(List<Recipe> recommendations) {
         support.firePropertyChange("Recipe recommendations", this.recipeRecommendations, recommendations);
         this.recipeRecommendations = recommendations;
     }
