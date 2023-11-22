@@ -49,6 +49,7 @@ public class ChefExpress implements PropertyChangeListener {
     }
 
     public void setRecommendations(List<Recipe> recommendations) {
+        this.recipeRecommendations = new ArrayList<>();
         support.firePropertyChange("Recipe recommendations", this.recipeRecommendations, recommendations);
         this.recipeRecommendations = recommendations;
     }
