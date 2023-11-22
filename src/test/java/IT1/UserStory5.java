@@ -27,6 +27,8 @@ public class UserStory5
     private Map<String, List<String>> recipeVideoIDs;
     private Map<Integer, Integer> expectedScores;
     private Set<Recipe> mockedRecipes;
+    private List<Recipe> recipes;
+    private List<Recipe> expectedRecipes;
     private RecipesProvider recipesProvider;
     private final String YT_PATH = "https://www.youtube.com/watch?v=";
     private final String BASE_QUERY = "receta de ";
@@ -34,181 +36,129 @@ public class UserStory5
     @BeforeEach
     public void setUp()
     {
-        this.scorerMockDefault = mock(RecipeScorer.class);
-        this.recipesProvider = mock(RecipesProvider.class);
-        this.YTService = mock(YTService.class);
+        List<Integer> recipeIds = Arrays.asList(1, 2, 3);
+        this.recipes = mockRecipes(recipeIds);
+        this.expectedRecipes = mockRecipes(Map.of(1, YT_PATH + "videoID-A",
+                2, YT_PATH + "videoID-C",
+                3, ""));
 
+        this.scorerMockDefault = mock(RecipeScorer.class);
+        Map<Recipe, Integer> scorerResults = Map.of(recipes.get(0),10,
+                recipes.get(1), 10,
+                recipes.get(2), 10);
+        this.setScorerResult(scorerResults);
+
+        this.recipesProvider = mock(RecipesProvider.class);
         this.chefExpress = new ChefExpress(this.recipesProvider,
                 this.scorerMockDefault, new HashMap<>());
-        this.videoRecipesUpdater = new VideoRecipesUpdater(this.YTService, this.chefExpress);
 
+        this.YTService = mock(YTService.class);
         this.recipeVideoIDs =  Map.of(
-                "R1", List.of("videoID-A", "videoID-B"),
-                "R2", List.of("videoID-C"),
-                "R3", Collections.emptyList(),
+                recipes.get(0).getName(), List.of("videoID-A", "videoID-B"),
+                recipes.get(1).getName(), List.of("videoID-C"),
+                recipes.get(2).getName(), Collections.emptyList(),
                 "", Collections.emptyList()
         );
+        this.setYTServiceResult(this.recipeVideoIDs);
 
-        this.mockedRecipes = Set.of(
-                mockRecipe(1, "R1"),
-                mockRecipe(2, "R2"),
-                mockRecipe(3, "R3"),
-                mockRecipe(4, "")
-        );
+        this.videoRecipesUpdater = new VideoRecipesUpdater(this.YTService, this.chefExpress);
+    }
 
-        expectedScores = Map.of(
-                1, 8,
-                2, 5,
-                3,5,
-                4,5
-        );
+    private List<Recipe> mockRecipes(List<Integer> ids)
+    {
+        return ids.stream()
+                .map(recipeId -> new Recipe(recipeId, "R" + recipeId, new HashMap<>()))
+                .collect(Collectors.toList());
+    }
+
+    private List<Recipe> mockRecipes(Map<Integer, String> recipe)
+    {
+        List<Recipe> recipes =  new ArrayList<>();
+        for (Map.Entry<Integer, String>entry : recipe.entrySet())
+        {
+            recipes.add(new Recipe(entry.getKey(), "R"+entry.getKey(), new HashMap<>(), entry.getValue()));
+        }
+        return recipes;
+    }
+
+    private void setScorerResult(Map<Recipe, Integer> scorerResult)
+    {
+        for (Map.Entry<Recipe, Integer> entry : scorerResult.entrySet())
+        {
+            when(this.scorerMockDefault.score(entry.getKey())).thenReturn(entry.getValue());
+        }
+    }
+
+    private void setYTServiceResult(Map<String, List<String>> ytResult)
+    {
+        for (Map.Entry<String, List<String>>entry : ytResult.entrySet())
+        {
+            when(this.YTService.getResults(this.BASE_QUERY + entry.getKey() )).thenReturn(entry.getValue());
+        }
     }
 
     @Test
-    @Description("Actualización de recetas con múltiples videos")
+    @Description("Actualizacion de recetas con multiples videos")
     public void ca1ActualizacionDeRecetasConMultiplesVideos()
     {
-
-        Map<String, List<String>> recipeVideoIDs = this.getSubMap(List.of("R1","R2"));
-        Set<Recipe> recipes = getSubset(List.of(1, 2));
-
-        List<Recipe> expectedRecipes = List.of(
-                mockRecipeWithVideoLink(1, "R1", "videoID-A"),
-                mockRecipeWithVideoLink(2, "R2", "videoID-C")
-        );
-
-        when(this.recipesProvider.getRecipes()).thenReturn(recipes);
-
-        setExpectedMockScore(recipes);
-
-        recipeVideoIDs.keySet().forEach(r ->
-                when(this.YTService.getResults(this.BASE_QUERY + r))
-                        .thenReturn(this.recipeVideoIDs.get(r)));
-
+        when(this.recipesProvider.getRecipes()).thenReturn(Set.of(this.recipes.get(0)));
         List<Recipe> actualRecipes = chefExpress.recommend();
 
-        assertEquals(actualRecipes, expectedRecipes);
-
+        assert actualRecipes.size() == 1;
+        assert  expectedRecipes.contains(actualRecipes.get(0));
+        assert this.videoRecipesUpdater.getLinksAdded().contains(actualRecipes.get(0).getVideoLink());
     }
 
     @Test
-    @Description("Actualización de recetas con un video")
+    @Description("Actualizacion de recetas con un video")
     public void ca2ActualizacionDeRecetasConUnVideo()
     {
-        Map<String, List<String>> recipeVideoIDs = this.getSubMap(List.of("R2"));
-        Set<Recipe> recipes = getSubset(List.of(2));
-
-        List<Recipe> expectedRecipes = List.of(
-                mockRecipeWithVideoLink(2, "R2", "videoID-C")
-        );
-
-        when(this.recipesProvider.getRecipes()).thenReturn(recipes);
-
-        setExpectedMockScore(recipes);
-
-        recipeVideoIDs.keySet().forEach(r ->
-                when(this.YTService.getResults(this.BASE_QUERY + r))
-                        .thenReturn(this.recipeVideoIDs.get(r)));
-
+        when(this.recipesProvider.getRecipes()).thenReturn(Set.of(this.recipes.get(1)));
         List<Recipe> actualRecipes = chefExpress.recommend();
 
-        assertEquals(actualRecipes, expectedRecipes);
+        assert actualRecipes.size() == 1;
+        assert  expectedRecipes.contains(actualRecipes.get(0));
+        assert this.videoRecipesUpdater.getLinksAdded().contains(actualRecipes.get(0).getVideoLink());
+    }
+
+    @Test
+    @Description("Actualizacion de multiples recetas con video.")
+    public void ca3ActualizacionDeMultiplesRecetasConVideo()
+    {
+        when(this.recipesProvider.getRecipes()).thenReturn(Set.of(this.recipes.get(0), this.recipes.get(1)));
+        List<Recipe> actualRecipes = chefExpress.recommend();
+
+        assert actualRecipes.size() == 2;
+        assert  expectedRecipes.contains(actualRecipes.get(0));
+        assert  expectedRecipes.contains(actualRecipes.get(1));
+
+        assert this.videoRecipesUpdater.getLinksAdded().contains(actualRecipes.get(0).getVideoLink());
+        assert this.videoRecipesUpdater.getLinksAdded().contains(actualRecipes.get(1).getVideoLink());
     }
 
     @Test
     @Description("Receta sin video encontrado")
-    public void ca3RecetaSinVideoEncontrado()
+    public void ca4RecetaSinVideoEncontrado()
     {
-        Map<String, List<String>> recipeVideoIDs = this.getSubMap(List.of("R3"));
-
-        Set<Recipe> recipes = getSubset(List.of(3));
-
-        List<Recipe> expectedRecipes = List.of(
-                mockRecipe(3, "R3")
-        );
-
-        when(this.recipesProvider.getRecipes()).thenReturn(recipes);
-
-        setExpectedMockScore(recipes);
-
-        recipeVideoIDs.keySet().forEach(r ->
-                when(this.YTService.getResults(this.BASE_QUERY + r))
-                        .thenReturn(this.recipeVideoIDs.get(r)));
-
+        when(this.recipesProvider.getRecipes()).thenReturn(Set.of(this.recipes.get(2)));
         List<Recipe> actualRecipes = chefExpress.recommend();
 
-        assertEquals(actualRecipes, expectedRecipes);
+        assert actualRecipes.size() == 1;
+        assert  expectedRecipes.contains(actualRecipes.get(0));
+        assert this.videoRecipesUpdater.getLinksAdded().contains(actualRecipes.get(0).getVideoLink());
     }
 
     @Test
     @Description("Búsqueda sin nombre de receta")
-    public void ca4BusquedaSinNombreDeReceta()
+    public void ca5BusquedaSinNombreDeReceta()
     {
-        Map<String, List<String>> recipeVideoIDs = this.getSubMap(List.of(""));
-
-        Set<Recipe> recipes = getSubset(List.of(4));
-
-        List<Recipe> expectedRecipes = List.of(
-                mockRecipe(4, "")
-        );
-
-        when(this.recipesProvider.getRecipes()).thenReturn(recipes);
-
-        setExpectedMockScore(recipes);
-
-        recipeVideoIDs.keySet().forEach(r ->
-                when(this.YTService.getResults(this.BASE_QUERY + r))
-                        .thenReturn(this.recipeVideoIDs.get(r)));
-
+        Recipe emptyNameRecipe = new Recipe(0, "", new HashMap<>());
+        when(this.recipesProvider.getRecipes()).thenReturn(Set.of(emptyNameRecipe));
         List<Recipe> actualRecipes = chefExpress.recommend();
 
-        assertEquals(actualRecipes, expectedRecipes);
+        assert  actualRecipes.isEmpty();
+        assert this.videoRecipesUpdater.getLinksAdded().isEmpty();
     }
-
-    private Recipe mockRecipe(int id, String name) {
-        Map<String, Float> ingredients = Map.of(
-                "ingredient-1", 10.0f,
-                "ingredient-2", 20.0f,
-                "ingredient-3", 30.0f
-        );
-        return new Recipe(id, name, ingredients);
-    }
-
-    private Recipe mockRecipeWithVideoLink(int id, String name, String
-            videoLink) {
-        Map<String, Float> ingredients = Map.of(
-                "ingredient-1", 10.0f,
-                "ingredient-2", 20.0f,
-                "ingredient-3", 30.0f
-        );
-        return new Recipe(id, name, ingredients, this.YT_PATH + videoLink);
-    }
-
-    private Map<String, List<String>> getSubMap(List<String> keys)
-    {
-        return keys.stream()
-                .filter(recipeVideoIDs::containsKey)
-                .collect(Collectors.toMap(
-                        key -> key,
-                        key -> recipeVideoIDs.get(key)
-                ));
-    }
-
-    private Set<Recipe> getSubset(List<Integer> recipeIds)
-    {
-        return mockedRecipes.stream()
-                .filter(recipe -> recipeIds.contains(recipe.getId()))
-                .collect(Collectors.toSet());
-    }
-
-    private void setExpectedMockScore(Set<Recipe> recipes)
-    {
-        recipes.stream().forEach(recipe ->
-                when(scorerMockDefault.score(recipe))
-                        .thenReturn(expectedScores.get(recipe.getId()))
-        );
-    }
-
 }
 
 
