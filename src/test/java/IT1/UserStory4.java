@@ -43,30 +43,38 @@ public class UserStory4
     @Description("No se selecciona puntuador")
     public void ca1NoSeSeleccionaPuntuador()
     {
+        chefExpress.setScorer("");
+        assert chefExpress.getScorerName().equals(scorerSaludable.getName());
+    }
+
+    @Test
+    @Description("No se selecciona puntuador")
+    public void ca2SeleccionDePuntuadorInvalido()
+    {
         assertThrows(IllegalArgumentException.class, () -> chefExpress.setScorer(null));
     }
 
     @Test
-    @Description("Selección del puntuador por defecto")
-    public void ca2SeleccionDeUnPuntuadorPorDefecto()
+    @Description("Seleccion del puntuador actual")
+    public void ca3SeleccionDelPuntuadorActual()
     {
         chefExpress.setScorer("Saludables");
         assertEquals(chefExpress.getScorerName(), scorerSaludable.getName());
     }
 
     @Test
-    @Description("Selección de nuevo puntuador")
-    public void ca3SeleccionDeUnNuevoPuntuador()
+    @Description("Seleccion de nuevo puntuador")
+    public void ca4SeleccionDeUnNuevoPuntuador()
     {
         chefExpress.setScorer("Sin TACC");
         assertEquals(chefExpress.getScorerName(), scorerCeliac.getName());
     }
 
     @Test
-    @Description("Selección de un puntuador no válido")
-    public void ca4SeleccionDeUnPuntuadorNoValido()
+    @Description("Seleccion de un puntuador no valido")
+    public void ca5SeleccionDeUnPuntuadorNoValido()
     {
-        chefExpress.setScorer("Banana");
+        chefExpress.setScorer("Invalido");
         assertEquals(chefExpress.getScorerName(), scorerSaludable.getName());
     }
 
