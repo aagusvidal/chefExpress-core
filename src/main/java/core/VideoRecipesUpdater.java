@@ -11,7 +11,7 @@ import java.util.List;
 public class VideoRecipesUpdater implements PropertyChangeListener
 {
     private YTService ytService;
-    private final String YT_BASE_PATH = "https://www.youtube.com/watch?v=";
+    private String ytBasePath = "https://www.youtube.com/watch?v=";
     private List<String> lastLinksAdded;
     public VideoRecipesUpdater(YTService ytService, ChefExpress chefExpress)
     {
@@ -25,7 +25,7 @@ public class VideoRecipesUpdater implements PropertyChangeListener
         String queryPrefix = "receta de ";
         String videoID = this.ytService.getResults(queryPrefix + query).stream().findFirst().orElse(null);
 
-        return videoID == null ? "" : YT_BASE_PATH + videoID;
+        return videoID == null ? "" : ytBasePath + videoID;
     }
 
     @Override
@@ -40,5 +40,10 @@ public class VideoRecipesUpdater implements PropertyChangeListener
     public List<String> getLinksAdded()
     {
         return this.lastLinksAdded;
+    }
+
+    public void setYTBasePath(String YT_BASE_PATH)
+    {
+        ytBasePath = YT_BASE_PATH;
     }
 }

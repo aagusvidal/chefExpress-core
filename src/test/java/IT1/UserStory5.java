@@ -37,9 +37,10 @@ public class UserStory5
     public void setUp()
     {
         List<Integer> recipeIds = Arrays.asList(1, 2, 3);
+        List<String> videoLinks = List.of("v1a", "v1b", "v2c");
         this.recipes = mockRecipes(recipeIds);
-        this.expectedRecipes = mockRecipes(Map.of(1, YT_PATH + "videoID-A",
-                2, YT_PATH + "videoID-C",
+        this.expectedRecipes = mockRecipes(Map.of(1, videoLinks.get(0),
+                2, videoLinks.get(2),
                 3, ""));
 
         this.scorerMockDefault = mock(RecipeScorer.class);
@@ -54,14 +55,15 @@ public class UserStory5
 
         this.YTService = mock(YTService.class);
         this.recipeVideoIDs =  Map.of(
-                recipes.get(0).getName(), List.of("videoID-A", "videoID-B"),
-                recipes.get(1).getName(), List.of("videoID-C"),
+                recipes.get(0).getName(), List.of(videoLinks.get(0), videoLinks.get(1)),
+                recipes.get(1).getName(), List.of(videoLinks.get(2)),
                 recipes.get(2).getName(), Collections.emptyList(),
                 "", Collections.emptyList()
         );
         this.setYTServiceResult(this.recipeVideoIDs);
 
         this.videoRecipesUpdater = new VideoRecipesUpdater(this.YTService, this.chefExpress);
+        this.videoRecipesUpdater.setYTBasePath("");
     }
 
     private List<Recipe> mockRecipes(List<Integer> ids)
@@ -98,8 +100,8 @@ public class UserStory5
     }
 
     @Test
-    @Description("Actualizacion de recetas con multiples videos")
-    public void ca1ActualizacionDeRecetasConMultiplesVideos()
+    @Description("Receta simple con multiples videos")
+    public void ca1RecetasimpleConMultiplesVideos()
     {
         when(this.recipesProvider.getRecipes()).thenReturn(Set.of(this.recipes.get(0)));
         List<Recipe> actualRecipes = chefExpress.recommend();
@@ -110,8 +112,8 @@ public class UserStory5
     }
 
     @Test
-    @Description("Actualizacion de recetas con un video")
-    public void ca2ActualizacionDeRecetasConUnVideo()
+    @Description("Receta simple con un video")
+    public void ca2RecetasimpleConUnVideo()
     {
         when(this.recipesProvider.getRecipes()).thenReturn(Set.of(this.recipes.get(1)));
         List<Recipe> actualRecipes = chefExpress.recommend();
@@ -122,8 +124,8 @@ public class UserStory5
     }
 
     @Test
-    @Description("Actualizacion de multiples recetas con video.")
-    public void ca3ActualizacionDeMultiplesRecetasConVideo()
+    @Description("Multiples recetas")
+    public void ca3MultiplesRecetas()
     {
         when(this.recipesProvider.getRecipes()).thenReturn(Set.of(this.recipes.get(0), this.recipes.get(1)));
         List<Recipe> actualRecipes = chefExpress.recommend();
@@ -137,8 +139,8 @@ public class UserStory5
     }
 
     @Test
-    @Description("Receta sin video encontrado")
-    public void ca4RecetaSinVideoEncontrado()
+    @Description("Receta simple sin video")
+    public void ca4RecetaSimpleSinVideo()
     {
         when(this.recipesProvider.getRecipes()).thenReturn(Set.of(this.recipes.get(2)));
         List<Recipe> actualRecipes = chefExpress.recommend();
@@ -149,8 +151,8 @@ public class UserStory5
     }
 
     @Test
-    @Description("Búsqueda sin nombre de receta")
-    public void ca5BusquedaSinNombreDeReceta()
+    @Description("Busqueda sin receta")
+    public void ca5BusquedaSinReceta()
     {
         Recipe emptyNameRecipe = new Recipe(0, "", new HashMap<>());
         when(this.recipesProvider.getRecipes()).thenReturn(Set.of(emptyNameRecipe));
